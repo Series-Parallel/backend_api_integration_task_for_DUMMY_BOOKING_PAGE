@@ -10,7 +10,12 @@ interface FormProps {
   showsForm: boolean;
   onFormValidChange: (valid: boolean) => void;
   isSubmitButtonClicked: boolean;
-  onParticipantNameChange: (name: string, surname: string) => void;
+  onParticipantNameChange: (
+    index: number,
+    name: string,
+    surname: string
+  ) => void;
+  participantIndex: number;
 }
 
 const Form: React.FC<FormProps> = ({
@@ -19,6 +24,7 @@ const Form: React.FC<FormProps> = ({
   onFormValidChange,
   isSubmitButtonClicked,
   onParticipantNameChange,
+  participantIndex,
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -77,7 +83,7 @@ const Form: React.FC<FormProps> = ({
       formik.values.firstName.trim() !== "" &&
       formik.values.lastName.trim() !== ""
     ) {
-      onParticipantNameChange(formik.values.firstName, formik.values.lastName);
+      onParticipantNameChange(participantIndex ,formik.values.firstName, formik.values.lastName);
     }
   }, [isValid, formik.values.firstName]);
 

@@ -61,9 +61,19 @@ const Participants: React.FC<ParticipantsProps> = ({
     [onFormValidChange]
   );
 
-  const handleParticipantNameChange = (name: string, surName: string) => {
-    setParticipantName((prev) => [...prev, name]);
-    setParticipantSurName((prev) => [...prev, surName]);
+  const handleParticipantNameChange = (
+    index: number,
+    name: string,
+    surName: string
+  ) => {
+    const updatedNames = [...participantName];
+    const updatedSurnames = [...participantSurName];
+
+    updatedNames[index] = name;
+    updatedSurnames[index] = surName;
+
+    setParticipantName(updatedNames);
+    setParticipantSurName(updatedSurnames);
   };
   return (
     <div className="ml-[50px] flex flex-col space-y-[30px]">
@@ -137,10 +147,11 @@ const Participants: React.FC<ParticipantsProps> = ({
                     handlShowChange(index, childShow)
                   }
                   showsForm={shows[index]}
+                  participantIndex={index}
                   onFormValidChange={handleFormValidChange}
                   isSubmitButtonClicked={isSubmitButtonClicked}
-                  onParticipantNameChange={(name, surName) =>
-                    handleParticipantNameChange(name, surName)
+                  onParticipantNameChange={(index, name, surName) =>
+                    handleParticipantNameChange(index, name, surName)
                   }
                 />
               )}
