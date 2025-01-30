@@ -15,15 +15,12 @@ const participantsSlice = createSlice({
     incrementDivs(state) {
       state.numDivs += 1;
     },
-    setNumDivs(state, action: PayloadAction<number>) {
-      state.numDivs = action.payload;
-    },
+
     decrementDivs(state) {
       state.numDivs -= 1;
     },
   },
 });
 
-export const { incrementDivs, setNumDivs, decrementDivs } =
-  participantsSlice.actions;
+export const { incrementDivs, decrementDivs } = participantsSlice.actions;
 export default participantsSlice.reducer;
