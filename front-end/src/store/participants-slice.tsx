@@ -1,26 +1,25 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ParticipantsState {
-  numDivs: number;
+  participants: string[]; // Change numDivs to participants array
 }
 
 const initialState: ParticipantsState = {
-  numDivs: 0,
+  participants: [],
 };
 
 const participantsSlice = createSlice({
   name: "participants",
   initialState,
   reducers: {
-    incrementDivs(state) {
-      state.numDivs += 1;
+    addParticipant(state, action: PayloadAction<string>) {
+      state.participants.push(action.payload); // Add participant to the array
     },
-
-    decrementDivs(state) {
-      state.numDivs -= 1;
+    removeParticipant(state, action: PayloadAction<number>) {
+      state.participants.splice(action.payload, 1); // Remove participant at a specific index
     },
   },
 });
 
-export const { incrementDivs, decrementDivs } = participantsSlice.actions;
+export const { addParticipant, removeParticipant } = participantsSlice.actions;
 export default participantsSlice.reducer;

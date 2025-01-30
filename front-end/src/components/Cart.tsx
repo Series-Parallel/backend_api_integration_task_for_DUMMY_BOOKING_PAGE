@@ -7,9 +7,12 @@ interface CartProps {
 }
 
 const Cart: React.FC<CartProps> = ({ isFormValid, onSubmitClick }) => {
-  const numberOfItems = useSelector(
-    (state: RootState) => state.participants.numDivs
-  );
+  const participants = useSelector(
+    (state: RootState) => state.participants.participants
+  ); // Getting the participants array from the store
+
+  const numberOfItems = participants.length; // Number of items is now the length of the participants array
+
   return (
     <div className="flex flex-col space-y-[30px]">
       <div
@@ -21,7 +24,6 @@ const Cart: React.FC<CartProps> = ({ isFormValid, onSubmitClick }) => {
           <div className="flex flex-col space-y-[10px]">
             <div className="text-[17px]"> Tour of 27 jan</div>
             <div className="w-[89px] h-[32px] bg-[#f2f4f7] rounded-lg text-[#8a9099] text-center pt-[2px]">
-              {" "}
               1 hours
             </div>
           </div>

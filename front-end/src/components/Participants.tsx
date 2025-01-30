@@ -1,7 +1,7 @@
 import { RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../store";
-import { decrementDivs, incrementDivs } from "../store/participants-slice";
+import { addParticipant, removeParticipant } from "../store/participants-slice";
 import { useCallback, useState } from "react";
 import Form from "./Form";
 
@@ -19,7 +19,9 @@ const Participants: React.FC<ParticipantsProps> = ({
   onFormValidChange,
   isSubmitButtonClicked,
 }) => {
-  const numDivs = useSelector((state: RootState) => state.participants.numDivs);
+  const participants = useSelector(
+    (state: RootState) => state.participants.participants
+  );
   const dispatch = useDispatch<AppDispatch>();
   const [extraForms, setExtraForms] = useState<boolean[]>([]);
   const [shows, setShows] = useState<boolean[]>([]);
@@ -29,25 +31,26 @@ const Participants: React.FC<ParticipantsProps> = ({
   const [participantName, setParticipantName] = useState<string[]>([]);
   const [participantSurName, setParticipantSurName] = useState<string[]>([]);
 
-  const handlExtraForm = (index: number) => {
+  const handleExtraForm = (index: number) => {
     setExtraForms((prev) =>
       prev.map((form, i) => (i === index ? !form : form))
     );
   };
 
   const handleAddingDivs = () => {
-    dispatch(incrementDivs());
+    const newParticipant = `Participant ${participants.length + 1}`;
+    dispatch(addParticipant(newParticipant));
     setExtraForms((prev) => [...prev, false]);
     setShows((prev) => [...prev, false]);
   };
 
   const handleRemovingDivs = (index: number) => {
-    dispatch(decrementDivs());
+    dispatch(removeParticipant(index)); // Remove participant at the specific index
     setExtraForms((prev) => prev.filter((_, i) => i !== index));
     setShows((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handlShowChange = (index: number, childShow: boolean) => {
+  const handleShowChange = (index: number, childShow: boolean) => {
     setShows(
       (prev) => prev.map((shows, i) => (i === index ? childShow : shows)) // Update the specific show
     );
@@ -75,6 +78,7 @@ const Participants: React.FC<ParticipantsProps> = ({
     setParticipantName(updatedNames);
     setParticipantSurName(updatedSurnames);
   };
+
   return (
     <div className="ml-[50px] flex flex-col space-y-[30px]">
       <div className="text-[35px] mt-[50px] font-bold">Select participants</div>
@@ -86,7 +90,7 @@ const Participants: React.FC<ParticipantsProps> = ({
         <div className="w-[56px] h-[32px] bg-[#EEFFCC] rounded-lg  justify-items-center  text-center mr-[30px] text-[#4D661A]">
           $100
         </div>
-        <div className="mr-[30px]">{numDivs}</div>
+        <div className="mr-[30px]">{participants.length}</div>
         <button
           className="w-[44px] cursor-pointer h-[44px] rounded-[50px] font-bold text-[20px] border-2 border-gray-200  "
           onClick={handleAddingDivs}
@@ -95,12 +99,12 @@ const Participants: React.FC<ParticipantsProps> = ({
         </button>
       </div>
 
-      {numDivs > 0 && (
+      {participants.length > 0 && (
         <div className="w-[550px]  bg-[#F2F4F7] rounded-lg flex flex-col pl-[25px] pb-[25px] space-y-[20px] mb-[20px] ">
           <div className="text-[#8A9099] mt-[15px]">
             Please provide additional details for each participant
           </div>
-          {[...Array(numDivs)].map((_, index) => (
+          {participants.map((_, index) => (
             <div
               key={index}
               className="w-[504px] pt-[20px] pb-[20px] justify-center items-center flex flex-col space-y-[20px]  bg-white rounded-lg"
@@ -108,7 +112,7 @@ const Participants: React.FC<ParticipantsProps> = ({
               <div className="flex flex-row space-x-[20px]">
                 <button
                   className="w-[40px] h-[40px] rounded-[50px] border-2 border-gray-200 cursor-pointer"
-                  onClick={() => handlExtraForm(index)}
+                  onClick={() => handleExtraForm(index)}
                 >
                   {extraForms[index] === false ? (
                     <img src={down} />
@@ -144,7 +148,7 @@ const Participants: React.FC<ParticipantsProps> = ({
               {extraForms[index] && (
                 <Form
                   onShowChange={(childShow) =>
-                    handlShowChange(index, childShow)
+                    handleShowChange(index, childShow)
                   }
                   showsForm={shows[index]}
                   participantIndex={index}
