@@ -5,16 +5,13 @@ export const schema = yup.object().shape({
   lastName: yup.string().required("Last name is required"),
   dateOfBirth: yup.string().required("Date of birth is required"),
   gender: yup.string().oneOf(["Male", "Female"]).required("Gender is required"),
-  proof: yup
-    .boolean()
-    .oneOf([true, false])
-    .required("This field should be checked!"),
+  proof: yup.boolean().oneOf([true]).required("This field should be checked!"),
   notFlying: yup
     .boolean()
-    .oneOf([true, false])
+    .oneOf([true])
     .required("This field should be checked!"),
   notPregnant: yup
     .boolean()
-    .oneOf([true, false])
+    .oneOf([true])
     .required("This field should be checked!"),
 });

@@ -2,7 +2,7 @@ import { RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../store";
 import { decrementDivs, incrementDivs } from "../store/participants-slice";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Form from "./Form";
 
 import down from "../assets/down-arrow.png";
@@ -10,11 +10,24 @@ import up from "../assets/up-arrow.png";
 import bin from "../assets/bin.png";
 import warning from "../assets/warning.png";
 
-const Participants: React.FC = () => {
+interface ParticipantsProps {
+  onFormValidChange: (isValid: boolean) => void;
+  isSubmitButtonClicked: boolean;
+}
+
+const Participants: React.FC<ParticipantsProps> = ({
+  onFormValidChange,
+  isSubmitButtonClicked,
+}) => {
   const numDivs = useSelector((state: RootState) => state.participants.numDivs);
   const dispatch = useDispatch<AppDispatch>();
   const [extraForms, setExtraForms] = useState<boolean[]>([]);
   const [shows, setShows] = useState<boolean[]>([]);
+
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
+
+  const [participantName, setParticipantName] = useState<string[]>([]);
+  const [participantSurName, setParticipantSurName] = useState<string[]>([]);
 
   const handlExtraForm = (index: number) => {
     setExtraForms((prev) =>
@@ -40,6 +53,18 @@ const Participants: React.FC = () => {
     );
   };
 
+  const handleFormValidChange = useCallback(
+    (isValid: boolean) => {
+      setIsFormValid(isValid);
+      onFormValidChange(isValid);
+    },
+    [onFormValidChange]
+  );
+
+  const handleParticipantNameChange = (name: string, surName: string) => {
+    setParticipantName((prev) => [...prev, name]);
+    setParticipantSurName((prev) => [...prev, surName]);
+  };
   return (
     <div className="ml-[50px] flex flex-col space-y-[30px]">
       <div className="text-[35px] mt-[50px] font-bold">Select participants</div>
@@ -82,7 +107,18 @@ const Participants: React.FC = () => {
                   )}
                 </button>
                 <div className="flex flex-col text-[15px] mr-[250px]">
-                  <div className="text-[17px]">Participant {index + 1}</div>
+                  <div className="text-[17px]">
+                    {isFormValid &&
+                    participantName[index] &&
+                    participantSurName[index] ? (
+                      <span className="flex flex-row space-x-[5px]">
+                        <p>{participantName[index]}</p>
+                        <p>{participantSurName[index]}</p>
+                      </span>
+                    ) : (
+                      <p>Participant {index + 1}</p>
+                    )}
+                  </div>
                   <div className="text-[#8A9099]">Snorkeler Youth</div>
                 </div>
                 <p className="mt-[12px]">
@@ -99,6 +135,12 @@ const Participants: React.FC = () => {
                 <Form
                   onShowChange={(childShow) =>
                     handlShowChange(index, childShow)
+                  }
+                  showsForm={shows[index]}
+                  onFormValidChange={handleFormValidChange}
+                  isSubmitButtonClicked={isSubmitButtonClicked}
+                  onParticipantNameChange={(name, surName) =>
+                    handleParticipantNameChange(name, surName)
                   }
                 />
               )}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 
 import down from "../assets/down-arrow.png";
@@ -7,9 +7,19 @@ import ExtraForm from "./ExtraForm";
 
 interface FormProps {
   onShowChange: (show: boolean) => void;
+  showsForm: boolean;
+  onFormValidChange: (valid: boolean) => void;
+  isSubmitButtonClicked: boolean;
+  onParticipantNameChange: (name: string, surname: string) => void;
 }
 
-const Form: React.FC<FormProps> = ({ onShowChange }) => {
+const Form: React.FC<FormProps> = ({
+  onShowChange,
+  showsForm,
+  onFormValidChange,
+  isSubmitButtonClicked,
+  onParticipantNameChange,
+}) => {
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -21,10 +31,56 @@ const Form: React.FC<FormProps> = ({ onShowChange }) => {
       notPregnant: false,
     },
     onSubmit: (values) => {
-      console.log(values);
+      console.log("Form Submitted", values);
     },
     validationSchema: schema,
   });
+
+  const [isValid, setIsValid] = useState<boolean>(false);
+  useEffect(() => {
+    const newIsValid =
+      formik.values.firstName.trim() !== "" &&
+      formik.values.lastName.trim() !== "" &&
+      formik.values.dateOfBirth.trim() !== "" &&
+      formik.values.gender.trim() !== "" &&
+      formik.values.proof === true &&
+      formik.values.notFlying === true &&
+      formik.values.notPregnant === true;
+
+    if (newIsValid !== isValid) {
+      setIsValid(newIsValid);
+      onFormValidChange(newIsValid);
+    }
+    console.log("Form is valid", isValid);
+  }, [
+    formik.values.firstName,
+    formik.values.lastName,
+    formik.values.dateOfBirth,
+    formik.values.gender,
+    formik.values.proof,
+    formik.values.notFlying,
+    formik.values.notPregnant,
+    isValid,
+  ]);
+
+  const hasSubmitted = useRef(false);
+  useEffect(() => {
+    if (isSubmitButtonClicked && !hasSubmitted.current) {
+      formik.submitForm();
+      hasSubmitted.current = true;
+    }
+  }, [isSubmitButtonClicked, formik]);
+
+  useEffect(() => {
+    if (
+      isValid &&
+      formik.values.firstName.trim() !== "" &&
+      formik.values.lastName.trim() !== ""
+    ) {
+      onParticipantNameChange(formik.values.firstName, formik.values.lastName);
+    }
+  }, [isValid, formik.values.firstName]);
+
   console.log(formik);
   console.log(formik.errors);
 
@@ -32,7 +88,7 @@ const Form: React.FC<FormProps> = ({ onShowChange }) => {
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const newShow = !show;
+    const newShow = !showsForm;
     setShow(newShow);
     onShowChange(newShow);
   };

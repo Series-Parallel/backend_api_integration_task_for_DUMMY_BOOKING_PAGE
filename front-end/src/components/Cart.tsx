@@ -1,7 +1,12 @@
 import { RootState } from "../store";
 import { useSelector } from "react-redux";
 
-const Cart: React.FC = () => {
+interface CartProps {
+  isFormValid: boolean;
+  onSubmitClick: () => void;
+}
+
+const Cart: React.FC<CartProps> = ({ isFormValid, onSubmitClick }) => {
   const numberOfItems = useSelector(
     (state: RootState) => state.participants.numDivs
   );
@@ -52,7 +57,16 @@ const Cart: React.FC = () => {
           </div>
         )}
       </div>
-      <button className="w-[422px] h-[48px] rounded-[50px] cursor-pointer bg-[#F2F4F7]">
+      <button
+        type="submit"
+        disabled={!isFormValid}
+        className={`w-[422px] h-[48px] rounded-[50px]   ${
+          isFormValid
+            ? "bg-black text-white cursor-pointer"
+            : "bg-[#F2F4F7] cursor-not-allowed"
+        }`}
+        onClick={onSubmitClick}
+      >
         Continue
       </button>
     </div>
