@@ -35,6 +35,18 @@ const Form: React.FC<FormProps> = ({
       proof: false,
       notFlying: false,
       notPregnant: false,
+      weigth: 0,
+      height: 0,
+      shoeSizeType: "",
+      shoeSize: 0,
+      bodytype: "",
+      mask: false,
+      snorkel: false,
+      fins: false,
+      boots: false,
+      bcd: false,
+      wetsuit: false,
+      regulator: false,
     },
     onSubmit: (values) => {
       console.log("Form Submitted", values);
@@ -83,7 +95,11 @@ const Form: React.FC<FormProps> = ({
       formik.values.firstName.trim() !== "" &&
       formik.values.lastName.trim() !== ""
     ) {
-      onParticipantNameChange(participantIndex ,formik.values.firstName, formik.values.lastName);
+      onParticipantNameChange(
+        participantIndex,
+        formik.values.firstName,
+        formik.values.lastName
+      );
     }
   }, [isValid, formik.values.firstName]);
 

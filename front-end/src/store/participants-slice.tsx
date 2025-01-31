@@ -13,10 +13,12 @@ const participantsSlice = createSlice({
   initialState,
   reducers: {
     addParticipant(state, action: PayloadAction<string>) {
-      state.participants.push(action.payload); // Add participant to the array
+      state.participants.push(action.payload);
     },
     removeParticipant(state, action: PayloadAction<number>) {
-      state.participants.splice(action.payload, 1); // Remove participant at a specific index
+      state.participants = state.participants.filter(
+        (_, i) => i !== action.payload
+      );
     },
   },
 });

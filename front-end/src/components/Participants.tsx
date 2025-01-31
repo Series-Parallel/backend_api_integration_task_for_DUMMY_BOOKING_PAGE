@@ -45,7 +45,7 @@ const Participants: React.FC<ParticipantsProps> = ({
   };
 
   const handleRemovingDivs = (index: number) => {
-    dispatch(removeParticipant(index)); // Remove participant at the specific index
+    dispatch(removeParticipant(index)); 
     setExtraForms((prev) => prev.filter((_, i) => i !== index));
     setShows((prev) => prev.filter((_, i) => i !== index));
   };
