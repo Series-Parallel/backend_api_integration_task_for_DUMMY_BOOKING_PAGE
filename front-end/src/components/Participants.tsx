@@ -127,7 +127,7 @@ const Participants: React.FC<ParticipantsProps> = ({
                 </button>
                 <div className="flex flex-col text-[15px] mr-[250px]">
                   <div className="text-[17px]">
-                    {isFormValid &&
+                    {isFormValid[index] &&
                     participantName[index] &&
                     participantSurName[index] ? (
                       <span className="flex flex-row space-x-[5px]">
