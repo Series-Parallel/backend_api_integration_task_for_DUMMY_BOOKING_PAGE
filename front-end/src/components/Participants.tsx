@@ -9,6 +9,7 @@ import down from "../assets/down-arrow.png";
 import up from "../assets/up-arrow.png";
 import bin from "../assets/bin.png";
 import warning from "../assets/warning.png";
+import safe from "../assets/check-mark.png";
 
 interface ParticipantsProps {
   onFormValidChange: (isValid: boolean) => void;
@@ -45,7 +46,7 @@ const Participants: React.FC<ParticipantsProps> = ({
   };
 
   const handleRemovingDivs = (index: number) => {
-    dispatch(removeParticipant(index)); 
+    dispatch(removeParticipant(index));
     setExtraForms((prev) => prev.filter((_, i) => i !== index));
     setShows((prev) => prev.filter((_, i) => i !== index));
   };
@@ -136,7 +137,10 @@ const Participants: React.FC<ParticipantsProps> = ({
                   <div className="text-[#8A9099]">Snorkeler Youth</div>
                 </div>
                 <p className="mt-[12px]">
-                  <img className="w-[24px] h-[24px]" src={warning} />
+                  <img
+                    className="w-[24px] h-[24px]"
+                    src={isFormValid ? safe : warning}
+                  />
                 </p>
                 <button
                   className="cursor-pointer"

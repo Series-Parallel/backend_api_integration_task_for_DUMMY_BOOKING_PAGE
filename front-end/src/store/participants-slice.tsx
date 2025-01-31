@@ -16,6 +16,7 @@ const participantsSlice = createSlice({
       state.participants.push(action.payload);
     },
     removeParticipant(state, action: PayloadAction<number>) {
+      console.log("index", action);
       state.participants = state.participants.filter(
         (_, i) => i !== action.payload
       );
