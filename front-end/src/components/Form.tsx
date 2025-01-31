@@ -35,11 +35,13 @@ const Form: React.FC<FormProps> = ({
       proof: false,
       notFlying: false,
       notPregnant: false,
-      weigth: 0,
+      weight: 0,
+      weightUnit: "",
       height: 0,
+      heightUnit: "",
       shoeSizeType: "",
       shoeSize: 0,
-      bodytype: "",
+      bodyType: "",
       mask: false,
       snorkel: false,
       fins: false,
@@ -241,7 +243,7 @@ const Form: React.FC<FormProps> = ({
       </div>
 
       {/* this one is optional */}
-      {show && <ExtraForm />}
+      {show && <ExtraForm formik={formik} />}
       <div className="w-[459px] mt-[10px] border-1 border-gray-300 "></div>
     </form>
   );

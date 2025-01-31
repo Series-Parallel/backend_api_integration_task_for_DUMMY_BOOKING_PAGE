@@ -15,10 +15,24 @@ export const schema = yup.object().shape({
     .oneOf([true])
     .required("This field should be checked!"),
   weight: yup.number().notRequired(),
+  weightUnit: yup.string().oneOf(["kg", "lbs"]).notRequired(),
   height: yup.number().notRequired(),
-  shoeSizeType: yup.string().oneOf(["EU","US Men", "US Women","UK"]).notRequired(),
-  shoeSize: yup.number().notRequired(),
-  bodyType: yup.string().oneOf(["Slim","Average","Atheletic","Heavy"]).notRequired(),
+  heightUnit: yup.string().oneOf(["cm", "ft in"]).notRequired(),
+  shoeSizeType: yup
+    .string()
+    .oneOf(["EU", "US Men", "US Women", "UK"])
+    .notRequired(),
+  shoeSize: yup
+    .number()
+    .nullable()
+    .transform((_, value) => (value === "" ? null : value))
+    .notRequired(),
+  bodyType: yup
+    .string()
+    .oneOf(["Slim", "Average", "Atheletic", "Heavy"])
+    .notRequired(),
+
+  /* optional fields*/
   mask: yup.boolean().oneOf([true, false]).notRequired(),
   snorkel: yup.boolean().oneOf([true, false]).notRequired(),
   fins: yup.boolean().oneOf([true, false]).notRequired(),

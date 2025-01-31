@@ -1,44 +1,25 @@
-import { useState } from "react";
+import { FormikProps } from "formik";
 
-const ExtraForm = () => {
-  const [weight, setWeight] = useState<string>("");
+interface ExtraFormProps {
+  formik: FormikProps<any>;
+}
 
-  const [height, setHeight] = useState<string>("");
-
-  const [selectedButton, setSelectedButton] = useState<Set<string>>(new Set());
-
-  const handleWeightUnitChange = (unit: string) => {
-    setWeight(unit);
-  };
-
-  const handleHeightUnitChange = (unit: string) => {
-    setHeight(unit);
-  };
-
+const ExtraForm: React.FC<ExtraFormProps> = ({ formik }) => {
   const toggleSelection = (
     e: React.MouseEvent<HTMLButtonElement>,
     item: string
   ) => {
     e.preventDefault();
-    setSelectedButton((prevSelected) => {
-      const newSelected = new Set(prevSelected);
-
-      if (newSelected.has(item)) {
-        newSelected.delete(item);
-      } else {
-        newSelected.add(item);
-      }
-      return newSelected;
-    });
+    formik.setFieldValue(item, !formik.values[item]);
   };
   const equipment = [
-    "Mask",
-    "Snorkel",
-    "Fins",
-    "Boots",
-    "BCD",
-    "Wetsuit",
-    "Regulator",
+    "mask",
+    "snorkel",
+    "fins",
+    "boots",
+    "bcd",
+    "wetsuit",
+    "regulator",
   ];
   return (
     <div className="flex flex-col space-y-[10px]">
@@ -48,27 +29,31 @@ const ExtraForm = () => {
         <label className="flex items-center space-x-2 ml-[70px]">
           <input
             type="radio"
-            name="weight"
-            className="form-radio"
-            checked={weight === "lbs"}
-            onChange={() => handleWeightUnitChange("lbs")}
+            name="weightUnit"
+            value="lbs"
+            checked={formik.values.weightUnit === "lbs"}
+            onChange={formik.handleChange}
           />
           <span>lbs</span>
         </label>
         <label className="flex items-center space-x-2">
           <input
             type="radio"
-            name="weight"
-            className="form-radio"
-            checked={weight === "kg"}
-            onChange={() => handleWeightUnitChange("kg")}
+            name="weightUnit"
+            value="kg"
+            checked={formik.values.weightUnit === "kg"}
+            onChange={formik.handleChange}
           />
           <span>kg</span>
         </label>
         <input
-          type="text"
-          placeholder={weight ? `${weight}` : ""}
-          className="w-[186px] pl-[150px] h-[52px] rounded-lg border-1 border-gray-400"
+          type="number"
+          name="weight"
+          placeholder={
+            formik.values.weightUnit ? `${formik.values.weightUnit}` : ""
+          }
+          onChange={formik.handleChange}
+          className="w-[186px] pl-[145px] h-[52px] rounded-lg border-1 border-gray-400"
         />
       </div>
 
@@ -78,27 +63,31 @@ const ExtraForm = () => {
         <label className="flex items-center space-x-2 ml-[70px]">
           <input
             type="radio"
-            name="height"
-            className="form-radio"
-            checked={weight === "ft in"}
-            onChange={() => handleHeightUnitChange("ft in")}
+            name="heightUnit"
+            value="ft in"
+            checked={formik.values.heightUnit === "ft in"}
+            onChange={formik.handleChange}
           />
           <span>ft in</span>
         </label>
         <label className="flex items-center space-x-2">
           <input
             type="radio"
-            name="height"
-            className="form-radio"
-            checked={height === "cm"}
-            onChange={() => handleHeightUnitChange("cm")}
+            name="heightUnit"
+            value="cm"
+            checked={formik.values.heightUnit === "cm"}
+            onChange={formik.handleChange}
           />
           <span>cm</span>
         </label>
         <input
-          type="text"
-          placeholder={height ? `${height}` : ""}
-          className="w-[186px] pl-[150px] h-[52px] rounded-lg border-1 border-gray-400"
+          type="number"
+          name="height"
+          placeholder={
+            formik.values.heightUnit ? `${formik.values.heightUnit}` : ""
+          }
+          onChange={formik.handleChange}
+          className="w-[186px] pl-[140px]  h-[52px] rounded-lg border-1 border-gray-400"
         />
       </div>
       <div>
@@ -106,22 +95,37 @@ const ExtraForm = () => {
           <span className="text-[13px] text-gray-400 mt-[15px]">Shoe Size</span>
           <select
             aria-placeholder="ShoeSize"
+            name="shoeSizeType"
+            value={formik.values.shoeSizeType}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="ml-[60px] w-[163px] font-semibold h-[48px] pl-[10px] pr-[30px] border border-gray-400 rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
           >
-            <option defaultValue="Gender" value="" disabled>
-              ShoeSize
+            <option defaultValue="ShoeSize" value="" disabled>
+              ShoeSizeType
             </option>
             <option value="EU">EU</option>
             <option value="US Men">US Men</option>
-            <option value="Us Women">Us Women</option>
+            <option value="US Women">US Women</option>
             <option value="UK">UK</option>
           </select>
-          <select className=" w-[163px] font-semibold h-[48px] pl-[10px] pr-[30px] border border-gray-400 rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300">
-            <option defaultValue="Size" value="" disabled></option>
-            <option value="21">21</option>
-            <option value="22">22</option>
-            <option value="23">23</option>
-            <option value="24">24</option>
+
+          <select
+            name="shoeSize"
+            value={formik.values.shoeSize}
+            onChange={(e) => {
+              formik.setFieldValue("shoeSize", Number(e.target.value));
+            }}
+            onBlur={formik.handleBlur}
+            className=" w-[163px] font-semibold h-[48px] pl-[10px] pr-[30px] border border-gray-400 rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
+          >
+            <option defaultValue="Size" value="" disabled>
+              Shoe Size
+            </option>
+            <option value={21}>21</option>
+            <option value={22}>22</option>
+            <option value={23}>23</option>
+            <option value={24}>24</option>
           </select>
         </label>
       </div>
@@ -130,7 +134,13 @@ const ExtraForm = () => {
           <span className="text-[13px] text-gray-400 mt-[15px]">
             Body Shape
           </span>
-          <select className="appearance-none w-[335px] font-semibold h-[48px] pl-[10px] pr-[30px] border border-gray-400 rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300">
+          <select
+            name="body"
+            value={formik.values.bodyType}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className="appearance-none w-[335px] font-semibold h-[48px] pl-[10px] pr-[30px] border border-gray-400 rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
+          >
             <option defaultValue="shape" value=" " disabled>
               Shape
             </option>
@@ -145,15 +155,16 @@ const ExtraForm = () => {
         {equipment.map((item) => (
           <button
             key={item}
-            className={` text-center h-[40px] pl-[10px] pr-[10px] rounded-full border-1 border-gray-400 cursor-pointer
-    ${
-      selectedButton.has(item)
-        ? "bg-blue-500 text-white  text-[17px]"
-        : "bg-transparent text-black font-semibold text-[15px]"
-    }`}
-            onClick={(e) => toggleSelection(e, item)}
+            type="button"
+            className={`text-center h-[40px] pl-[10px] pr-[10px] rounded-full border-1 border-gray-400 cursor-pointer ${
+              formik.values[item]
+                ? "bg-blue-500 text-white text-[17px]"
+                : "bg-transparent text-black font-semibold text-[15px]"
+            }`}
+            onClick={(e) => toggleSelection(e, item)} // Use the toggle function
           >
-            {item}
+            {item.charAt(0).toUpperCase() + item.slice(1)}{" "}
+            {/* Capitalize the first letter */}
           </button>
         ))}
       </div>
