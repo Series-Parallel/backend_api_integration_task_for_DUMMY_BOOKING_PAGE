@@ -8,7 +8,7 @@ import ExtraForm from "./ExtraForm";
 interface FormProps {
   onShowChange: (show: boolean) => void;
   showsForm: boolean;
-  onFormValidChange: (valid: boolean) => void;
+  onFormValidChange: (index: number, valid: boolean) => void;
   isSubmitButtonClicked: boolean;
   onParticipantNameChange: (
     index: number,
@@ -69,7 +69,7 @@ const Form: React.FC<FormProps> = ({
 
     if (newIsValid !== isValid) {
       setIsValid(newIsValid);
-      onFormValidChange(newIsValid);
+      onFormValidChange(participantIndex, newIsValid);
     }
     console.log("Form is valid", isValid);
   }, [

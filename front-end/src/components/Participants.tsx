@@ -2,7 +2,7 @@ import { RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../store";
 import { addParticipant, removeParticipant } from "../store/participants-slice";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import Form from "./Form";
 
 import down from "../assets/down-arrow.png";
@@ -27,7 +27,9 @@ const Participants: React.FC<ParticipantsProps> = ({
   const [extraForms, setExtraForms] = useState<boolean[]>([]);
   const [shows, setShows] = useState<boolean[]>([]);
 
-  const [isFormValid, setIsFormValid] = useState<boolean>(false);
+  const [isFormValid, setIsFormValid] = useState<boolean[]>(
+    new Array(participants.length).fill(false)
+  );
 
   const [participantName, setParticipantName] = useState<string[]>([]);
   const [participantSurName, setParticipantSurName] = useState<string[]>([]);
@@ -57,13 +59,11 @@ const Participants: React.FC<ParticipantsProps> = ({
     );
   };
 
-  const handleFormValidChange = useCallback(
-    (isValid: boolean) => {
-      setIsFormValid(isValid);
-      onFormValidChange(isValid);
-    },
-    [onFormValidChange]
-  );
+  const handleFormValidChange = (index: number, isValid: boolean) => {
+    const updatedIsFormValid = [...isFormValid];
+    updatedIsFormValid[index] = isValid;
+    setIsFormValid(updatedIsFormValid);
+  };
 
   const handleParticipantNameChange = (
     index: number,
@@ -139,7 +139,7 @@ const Participants: React.FC<ParticipantsProps> = ({
                 <p className="mt-[12px]">
                   <img
                     className="w-[24px] h-[24px]"
-                    src={isFormValid ? safe : warning}
+                    src={isFormValid[index] ? safe : warning}
                   />
                 </p>
                 <button
