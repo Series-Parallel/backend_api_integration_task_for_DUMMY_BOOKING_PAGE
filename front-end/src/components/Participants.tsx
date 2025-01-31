@@ -48,9 +48,13 @@ const Participants: React.FC<ParticipantsProps> = ({
   };
 
   const handleRemovingDivs = (index: number) => {
+    console.log("Index passed:", index);
     dispatch(removeParticipant(index));
     setExtraForms((prev) => prev.filter((_, i) => i !== index));
     setShows((prev) => prev.filter((_, i) => i !== index));
+    setIsFormValid((prev) => prev.filter((_, i) => i !== index));
+    setParticipantName((prev) => prev.filter((_, i) => i !== index));
+    setParticipantSurName((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleShowChange = (index: number, childShow: boolean) => {
