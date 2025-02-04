@@ -10,6 +10,8 @@ import up from "../assets/up-arrow.png";
 import bin from "../assets/bin.png";
 import warning from "../assets/warning.png";
 import safe from "../assets/check-mark.png";
+import ContactForm from "./ContactForm";
+import Payment from "./Payment";
 
 interface ParticipantsProps {
   onFormValidChange: (isValid: boolean) => void;
@@ -67,6 +69,7 @@ const Participants: React.FC<ParticipantsProps> = ({
     const updatedIsFormValid = [...isFormValid];
     updatedIsFormValid[index] = isValid;
     setIsFormValid(updatedIsFormValid);
+    onFormValidChange(updatedIsFormValid.every(Boolean));
   };
 
   const handleParticipantNameChange = (
@@ -171,6 +174,8 @@ const Participants: React.FC<ParticipantsProps> = ({
           ))}
         </div>
       )}
+      <ContactForm />
+      <Payment />
     </div>
   );
 };
