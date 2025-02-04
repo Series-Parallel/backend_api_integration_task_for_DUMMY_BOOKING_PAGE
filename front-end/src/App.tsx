@@ -5,17 +5,16 @@ import ProgressBar from "./components/ProgressBar";
 
 function App() {
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
-  // const [isSubmitButtonClicked, setIsSubmitButtonClicked] =
-  //   useState<boolean>(false);
-
+  const [isSubmitButtonClicked, setIsSubmitButtonClicked] =
+    useState<boolean>(false);
   const [isContactFormVisible, setIsContactFormVisible] =
     useState<boolean>(false);
-
   const [isContactFormValid, setIsContactFormValid] = useState<boolean>(false);
+  const [isPaymentVisible, setIsPaymentVisible] = useState<boolean>(false);
 
-  // const handleSubmitButtonClick = (): void => {
-  //   setIsSubmitButtonClicked(true);
-  // };
+  const handleSubmitButtonClick = (): void => {
+    setIsSubmitButtonClicked((prev) => !prev);
+  };
 
   const handleContinueClick = (): void => {
     setIsContactFormVisible(true);
@@ -24,7 +23,10 @@ function App() {
   const handleContactFormValidation = (isValid: boolean): void => {
     setIsContactFormValid(isValid);
   };
-  
+
+  const handlePaymentVisibility = (isVisible: boolean): void => {
+    setIsPaymentVisible(isVisible);
+  };
 
   return (
     <>
@@ -33,14 +35,17 @@ function App() {
         <div className="flex flex-row space-x-[30px]">
           <Participants
             onFormValidChange={setIsFormValid}
-            // isSubmitButtonClicked={isSubmitButtonClicked}
+            isSubmitButtonClicked={isSubmitButtonClicked}
             isContinueButtonClicked={isContactFormVisible}
             onContactFormValidChange={handleContactFormValidation}
+            isPaymentVisible={isPaymentVisible}
           />
           <Cart
             isFormValid={isFormValid}
             onContinueClick={handleContinueClick}
             isContactFormValid={isContactFormValid}
+            onPaymentVisibilityChange={handlePaymentVisibility}
+            onSubmitClicked={handleSubmitButtonClick}
           />
         </div>
       </div>

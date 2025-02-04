@@ -15,16 +15,18 @@ import Payment from "./Payment";
 
 interface ParticipantsProps {
   onFormValidChange: (isValid: boolean) => void;
-  // isSubmitButtonClicked: boolean;
+  isSubmitButtonClicked: boolean;
   isContinueButtonClicked: boolean;
   onContactFormValidChange: (isValid: boolean) => void;
+  isPaymentVisible: boolean;
 }
 
 const Participants: React.FC<ParticipantsProps> = ({
   onFormValidChange,
   isContinueButtonClicked,
   onContactFormValidChange,
-  // isSubmitButtonClicked,
+  isPaymentVisible,
+  isSubmitButtonClicked,
 }) => {
   const participants = useSelector(
     (state: RootState) => state.participants.participants
@@ -93,7 +95,7 @@ const Participants: React.FC<ParticipantsProps> = ({
 
   return (
     <div className="ml-[50px] flex flex-col space-y-[30px]">
-      {!isContinueButtonClicked && (
+      {!isContinueButtonClicked && !isPaymentVisible && (
         <div className=" flex flex-col space-y-[30px]">
           {" "}
           <div className="text-[35px] mt-[50px] font-bold">
@@ -172,7 +174,7 @@ const Participants: React.FC<ParticipantsProps> = ({
                       showsForm={shows[index]}
                       participantIndex={index}
                       onFormValidChange={handleFormValidChange}
-                      // isSubmitButtonClicked={isSubmitButtonClicked}
+                      isSubmitButtonClicked={isSubmitButtonClicked}
                       onParticipantNameChange={(index, name, surName) =>
                         handleParticipantNameChange(index, name, surName)
                       }
@@ -184,10 +186,13 @@ const Participants: React.FC<ParticipantsProps> = ({
           )}
         </div>
       )}
-      {isContinueButtonClicked && (
-        <ContactForm onContactValidationChange={onContactFormValidChange} />
+      {isContinueButtonClicked && !isPaymentVisible && (
+        <ContactForm
+          onContactValidationChange={onContactFormValidChange}
+          isSubmitButtonClicked={isSubmitButtonClicked}
+        />
       )}
-      {/* {isPaymentVisible && <Payment />} */}
+      {isPaymentVisible && <Payment />}
     </div>
   );
 };

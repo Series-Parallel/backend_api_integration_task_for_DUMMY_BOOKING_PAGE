@@ -1,13 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { contactSchema } from "../schemas/ContactIndex";
 import { useFormik } from "formik";
 
 interface ContactFormProps {
   onContactValidationChange: (isValid: boolean) => void;
+  isSubmitButtonClicked: boolean;
 }
 
 const ContactForm: React.FC<ContactFormProps> = ({
-  onContactValidationChange: onValidationChange,
+  onContactValidationChange,
+  isSubmitButtonClicked
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -22,15 +24,39 @@ const ContactForm: React.FC<ContactFormProps> = ({
       ephone: "",
     },
     onSubmit: (values) => {
-      console.log("Form Submitted", values);
+      console.log("Contact Form Submitted", values);
     },
     validationSchema: contactSchema,
   });
 
+  const [isValid, setIsValid] = useState<boolean>(false);
   useEffect(() => {
-    const isValid = formik.isValid && formik.dirty;
-    onValidationChange(isValid);
-  }, [formik.isValid, formik.dirty, onValidationChange]);
+    const newIsValid =
+      formik.values.firstName.trim() !== "" &&
+      formik.values.lastName.trim() !== "" &&
+      formik.values.email.trim() !== "" &&
+      formik.values.code.trim() !== "" &&
+      formik.values.phone.trim() !== "";
+
+    if (newIsValid !== isValid) {
+      setIsValid(newIsValid);
+      onContactValidationChange(newIsValid);
+    }
+    console.log(" Contact Form is valid", isValid);
+  }, [
+    formik.values.firstName,
+    formik.values.lastName,
+    formik.values.email,
+    formik.values.code,
+    formik.values.phone,
+    isValid,
+  ]);
+
+  useEffect(() => {
+    if (isSubmitButtonClicked) {
+      formik.submitForm();
+    }
+  }, [isSubmitButtonClicked]);
 
   console.log(formik);
   console.log(formik.errors);

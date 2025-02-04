@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { RootState } from "../store";
 import { useSelector } from "react-redux";
 
@@ -5,20 +6,45 @@ interface CartProps {
   isFormValid: boolean;
   onContinueClick: () => void;
   isContactFormValid: boolean;
+  onPaymentVisibilityChange: (isVisible: boolean) => void;
+  onSubmitClicked: (isSubmit: boolean) => void;
 }
 
 const Cart: React.FC<CartProps> = ({
   isFormValid,
-  onContinueClick: onSubmitClick,
+  onContinueClick,
   isContactFormValid,
+  onPaymentVisibilityChange,
+  onSubmitClicked,
 }) => {
   const participants = useSelector(
     (state: RootState) => state.participants.participants
   ); // Getting the participants array from the store
 
-  const isContinueButtonEnabled = isFormValid || isContactFormValid;
+  const [isFormValidHere, setIsFormValidHere] = useState<boolean>(true);
 
   const numberOfItems = participants.length; // Number of items is now the length of the participants array
+
+  const handleContinueButtonClick = () => {
+    if (isFormValid && isFormValidHere) {
+      setIsFormValidHere(false);
+      onContinueClick();
+    }
+
+    if (isContactFormValid && !isFormValidHere) {
+      setIsFormValidHere(true);
+      onPaymentVisibilityChange(true);
+    }
+
+    if (isContactFormValid && isFormValidHere) {
+      setTimeout(() => onSubmitClicked(true), 0);
+    }
+  };
+  console.log("form value ", isFormValid);
+  console.log("Form value here: ", isFormValidHere);
+
+  const isContinueButtonEnabled =
+    (isFormValid && isFormValidHere) || isContactFormValid;
 
   return (
     <div className="flex flex-col space-y-[30px]">
@@ -74,7 +100,7 @@ const Cart: React.FC<CartProps> = ({
             ? "bg-black text-white cursor-pointer"
             : "bg-[#F2F4F7] cursor-not-allowed"
         }`}
-        onClick={onSubmitClick}
+        onClick={handleContinueButtonClick}
       >
         Continue
       </button>
