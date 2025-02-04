@@ -3,13 +3,20 @@ import { useSelector } from "react-redux";
 
 interface CartProps {
   isFormValid: boolean;
-  onSubmitClick: () => void;
+  onContinueClick: () => void;
+  isContactFormValid: boolean;
 }
 
-const Cart: React.FC<CartProps> = ({ isFormValid, onSubmitClick }) => {
+const Cart: React.FC<CartProps> = ({
+  isFormValid,
+  onContinueClick: onSubmitClick,
+  isContactFormValid,
+}) => {
   const participants = useSelector(
     (state: RootState) => state.participants.participants
   ); // Getting the participants array from the store
+
+  const isContinueButtonEnabled = isFormValid || isContactFormValid;
 
   const numberOfItems = participants.length; // Number of items is now the length of the participants array
 
@@ -61,9 +68,9 @@ const Cart: React.FC<CartProps> = ({ isFormValid, onSubmitClick }) => {
       </div>
       <button
         type="submit"
-        disabled={!isFormValid}
+        disabled={!isContinueButtonEnabled}
         className={`w-[422px] h-[48px] rounded-[50px]   ${
-          isFormValid
+          isContinueButtonEnabled
             ? "bg-black text-white cursor-pointer"
             : "bg-[#F2F4F7] cursor-not-allowed"
         }`}

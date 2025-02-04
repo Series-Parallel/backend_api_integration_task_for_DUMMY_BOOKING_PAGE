@@ -1,4 +1,40 @@
-const ContactForm = () => {
+import { useEffect } from "react";
+import { contactSchema } from "../schemas/ContactIndex";
+import { useFormik } from "formik";
+
+interface ContactFormProps {
+  onContactValidationChange: (isValid: boolean) => void;
+}
+
+const ContactForm: React.FC<ContactFormProps> = ({
+  onContactValidationChange: onValidationChange,
+}) => {
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      code: "",
+      phone: "",
+      eFirstName: "",
+      eLastName: "",
+      email: "",
+      ecode: "",
+      ephone: "",
+    },
+    onSubmit: (values) => {
+      console.log("Form Submitted", values);
+    },
+    validationSchema: contactSchema,
+  });
+
+  useEffect(() => {
+    const isValid = formik.isValid && formik.dirty;
+    onValidationChange(isValid);
+  }, [formik.isValid, formik.dirty, onValidationChange]);
+
+  console.log(formik);
+  console.log(formik.errors);
+
   return (
     <div className="flex flex-col space-y-[20px] mb-[20px]">
       <div className="text-[35px] font-bold"> Contact</div>
@@ -6,11 +42,17 @@ const ContactForm = () => {
       <form className="flex flex-col space-y-[10px]">
         <div className="flex flex-row space-x-[13px]">
           <input
+            value={formik.values.firstName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="w-[249px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
             name="firstName"
             placeholder="First Name"
           />
           <input
+            value={formik.values.lastName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="w-[249px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
             name="lastName"
             placeholder="Last Name"
@@ -18,20 +60,28 @@ const ContactForm = () => {
         </div>
         <div className="flex flex-row space-x-[13px]">
           <select
+            value={formik.values.code}
+            onChange={formik.handleChange}
             className="w-[126px] h-[56px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 "
-            name="countryCode"
+            name="code"
           >
             <option value="+1">+1</option>
             <option value="+91">+91</option>
           </select>
           <input
-            name="Phonenumber"
+            value={formik.values.phone}
+            name="phone"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             placeholder="Phone Number"
             className="w-[371px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
           />
         </div>
         <input
+          value={formik.values.email}
           name="email"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           placeholder="Email"
           className="w-[510px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
         />
@@ -40,11 +90,17 @@ const ContactForm = () => {
         </div>
         <div className="flex flex-row space-x-[13px]">
           <input
+            value={formik.values.eFirstName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="w-[249px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
             name="firstName"
             placeholder="First Name"
           />
           <input
+            value={formik.values.eLastName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             className="w-[249px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
             name="lastName"
             placeholder="Last Name"
@@ -52,15 +108,20 @@ const ContactForm = () => {
         </div>
         <div className="flex flex-row space-x-[13px]">
           <select
+            value={formik.values.ecode}
+            onChange={formik.handleChange}
             className="w-[126px] h-[56px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 "
-            name="countryCode"
+            name="ecode"
           >
             <option value="+1">+1</option>
             <option value="+91">+91</option>
           </select>
           <input
-            name="Phonenumber"
-            placeholder="Phone Number"
+            name="ephone"
+            value={formik.values.ephone}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder="Phone"
             className="w-[371px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
           />
         </div>

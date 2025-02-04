@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect,
+  //  useRef, 
+   useState } from "react";
 import { useFormik } from "formik";
 
 import down from "../assets/down-arrow.png";
@@ -9,7 +11,7 @@ interface FormProps {
   onShowChange: (show: boolean) => void;
   showsForm: boolean;
   onFormValidChange: (index: number, valid: boolean) => void;
-  isSubmitButtonClicked: boolean;
+  // isSubmitButtonClicked: boolean;
   onParticipantNameChange: (
     index: number,
     name: string,
@@ -22,7 +24,7 @@ const Form: React.FC<FormProps> = ({
   onShowChange,
   showsForm,
   onFormValidChange,
-  isSubmitButtonClicked,
+  // isSubmitButtonClicked,
   onParticipantNameChange,
   participantIndex,
 }) => {
@@ -83,13 +85,13 @@ const Form: React.FC<FormProps> = ({
     isValid,
   ]);
 
-  const hasSubmitted = useRef(false);
-  useEffect(() => {
-    if (isSubmitButtonClicked && !hasSubmitted.current) {
-      formik.submitForm();
-      hasSubmitted.current = true;
-    }
-  }, [isSubmitButtonClicked, formik]);
+  // const hasSubmitted = useRef(false);
+  // useEffect(() => {
+  //   if (isSubmitButtonClicked && !hasSubmitted.current) {
+  //     formik.submitForm();
+  //     hasSubmitted.current = true;
+  //   }
+  // }, [isSubmitButtonClicked, formik]);
 
   useEffect(() => {
     if (
