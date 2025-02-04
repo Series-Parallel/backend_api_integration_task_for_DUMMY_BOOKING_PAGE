@@ -85,6 +85,7 @@ const Form: React.FC<FormProps> = ({
 
   useEffect(() => {
     if (isSubmitButtonClicked) {
+      console.log("Submitting form F...");
       formik.submitForm();
     }
   }, [isSubmitButtonClicked]);

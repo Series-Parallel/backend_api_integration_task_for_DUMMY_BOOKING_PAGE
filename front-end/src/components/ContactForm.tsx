@@ -9,7 +9,7 @@ interface ContactFormProps {
 
 const ContactForm: React.FC<ContactFormProps> = ({
   onContactValidationChange,
-  isSubmitButtonClicked
+  isSubmitButtonClicked,
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -54,6 +54,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
   useEffect(() => {
     if (isSubmitButtonClicked) {
+      console.log("Submitting form CF...");
       formik.submitForm();
     }
   }, [isSubmitButtonClicked]);

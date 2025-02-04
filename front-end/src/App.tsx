@@ -13,7 +13,8 @@ function App() {
   const [isPaymentVisible, setIsPaymentVisible] = useState<boolean>(false);
 
   const handleSubmitButtonClick = (): void => {
-    setIsSubmitButtonClicked((prev) => !prev);
+    console.log("isSubmitButtonClicked BEFORE:", isSubmitButtonClicked);
+    setIsSubmitButtonClicked(true);
   };
 
   const handleContinueClick = (): void => {

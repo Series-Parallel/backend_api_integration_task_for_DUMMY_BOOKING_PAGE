@@ -26,7 +26,7 @@ const Cart: React.FC<CartProps> = ({
   const numberOfItems = participants.length; // Number of items is now the length of the participants array
 
   const handleContinueButtonClick = () => {
-    if (isFormValid && isFormValidHere) {
+    if (isFormValid && isFormValidHere && !isContactFormValid) {
       setIsFormValidHere(false);
       onContinueClick();
     }
@@ -37,6 +37,7 @@ const Cart: React.FC<CartProps> = ({
     }
 
     if (isContactFormValid && isFormValidHere) {
+      console.log("Submitting Forms...");
       setTimeout(() => onSubmitClicked(true), 0);
     }
   };
