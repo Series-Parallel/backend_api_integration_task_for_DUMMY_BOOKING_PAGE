@@ -56,6 +56,11 @@ const Form: React.FC<FormProps> = ({
   });
 
   const [isValid, setIsValid] = useState<boolean>(false);
+  const [show, setShow] = useState<boolean>(false);
+  const isSubmitButtonClicked = useSelector(
+    (state: RootState) => state.submitButton.isSubmitButtonClicked
+  );
+
   useEffect(() => {
     const newIsValid =
       formik.values.firstName.trim() !== "" &&
@@ -99,7 +104,6 @@ const Form: React.FC<FormProps> = ({
   console.log(formik);
   console.log(formik.errors);
 
-  const [show, setShow] = useState<boolean>(false);
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const newShow = !showsForm;
@@ -110,9 +114,6 @@ const Form: React.FC<FormProps> = ({
   console.log("Formik error", formik.errors);
 
   // const dispatch = useDispatch();
-  const isSubmitButtonClicked = useSelector(
-    (state: RootState) => state.submitButton.isSubmitButtonClicked
-  );
   useEffect(() => {
     if (isSubmitButtonClicked) {
       console.log("Submitting form F...");

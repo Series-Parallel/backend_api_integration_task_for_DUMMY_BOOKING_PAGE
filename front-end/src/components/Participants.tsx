@@ -28,6 +28,11 @@ const Participants: React.FC<ParticipantsProps> = () => {
   );
   const [participantName, setParticipantName] = useState<string[]>([]);
   const [participantSurName, setParticipantSurName] = useState<string[]>([]);
+  const [formValidChange, setFormValidChange] = useState<boolean>(false);
+  const [isContactFormVisible, setIsContactFormVisible] =
+    useState<boolean>(false);
+  const [isContactFormValid, setIsContactFormValid] = useState<boolean>(false);
+  const [isPaymentVisible, setIsPaymentVisible] = useState<boolean>(false);
 
   const handleExtraForm = (index: number) => {
     setExtraForms((prev) =>
@@ -58,7 +63,6 @@ const Participants: React.FC<ParticipantsProps> = () => {
     );
   };
 
-  const [formValidChange, setFormValidChange] = useState<boolean>(false);
   const handleFormValidChange = (index: number, isValid: boolean) => {
     const updatedIsFormValid = [...isFormValid];
     updatedIsFormValid[index] = isValid;
@@ -66,13 +70,9 @@ const Participants: React.FC<ParticipantsProps> = () => {
     setFormValidChange(updatedIsFormValid.every(Boolean));
   };
 
-  const [isContactFormVisible, setIsContactFormVisible] =
-    useState<boolean>(false);
   const handleContactFormVisibility = (): void => {
     setIsContactFormVisible(true);
   };
-
-  const [isContactFormValid, setIsContactFormValid] = useState<boolean>(false);
 
   const handleParticipantNameChange = (
     index: number,
@@ -88,7 +88,6 @@ const Participants: React.FC<ParticipantsProps> = () => {
     setParticipantName(updatedNames);
     setParticipantSurName(updatedSurnames);
   };
-  const [isPaymentVisible, setIsPaymentVisible] = useState<boolean>(false);
 
   return (
     <div className="flex flex-row space-x-[30px]">

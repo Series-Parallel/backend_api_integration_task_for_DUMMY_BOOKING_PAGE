@@ -30,6 +30,10 @@ const ContactForm: React.FC<ContactFormProps> = ({
   });
 
   const [isValid, setIsValid] = useState<boolean>(false);
+  const isSubmitButtonClicked = useSelector(
+    (state: RootState) => state.submitButton.isSubmitButtonClicked
+  );
+
   useEffect(() => {
     const newIsValid =
       formik.values.firstName.trim() !== "" &&
@@ -53,9 +57,6 @@ const ContactForm: React.FC<ContactFormProps> = ({
   ]);
 
   // const dispatch = useDispatch();
-  const isSubmitButtonClicked = useSelector(
-    (state: RootState) => state.submitButton.isSubmitButtonClicked
-  );
   useEffect(() => {
     if (isSubmitButtonClicked) {
       console.log("Submitting form CF....");
