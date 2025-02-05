@@ -12,22 +12,11 @@ import warning from "../assets/warning.png";
 import safe from "../assets/check-mark.png";
 import ContactForm from "./ContactForm";
 import Payment from "./Payment";
+import Cart from "./Cart";
 
-interface ParticipantsProps {
-  onFormValidChange: (isValid: boolean) => void;
-  // isSubmitButtonClicked: boolean;
-  isContinueButtonClicked: boolean;
-  onContactFormValidChange: (isValid: boolean) => void;
-  isPaymentVisible: boolean;
-}
+interface ParticipantsProps {}
 
-const Participants: React.FC<ParticipantsProps> = ({
-  onFormValidChange,
-  isContinueButtonClicked,
-  onContactFormValidChange,
-  isPaymentVisible,
-  // isSubmitButtonClicked,
-}) => {
+const Participants: React.FC<ParticipantsProps> = () => {
   const dispatch = useDispatch<AppDispatch>();
   const participants = useSelector(
     (state: RootState) => state.participants.participants
@@ -69,12 +58,21 @@ const Participants: React.FC<ParticipantsProps> = ({
     );
   };
 
+  const [formValidChange, setFormValidChange] = useState<boolean>(false);
   const handleFormValidChange = (index: number, isValid: boolean) => {
     const updatedIsFormValid = [...isFormValid];
     updatedIsFormValid[index] = isValid;
     setIsFormValid(updatedIsFormValid);
-    onFormValidChange(updatedIsFormValid.every(Boolean));
+    setFormValidChange(updatedIsFormValid.every(Boolean));
   };
+
+  const [isContactFormVisible, setIsContactFormVisible] =
+    useState<boolean>(false);
+  const handleContactFormVisibility = (): void => {
+    setIsContactFormVisible(true);
+  };
+
+  const [isContactFormValid, setIsContactFormValid] = useState<boolean>(false);
 
   const handleParticipantNameChange = (
     index: number,
@@ -90,103 +88,116 @@ const Participants: React.FC<ParticipantsProps> = ({
     setParticipantName(updatedNames);
     setParticipantSurName(updatedSurnames);
   };
+  const [isPaymentVisible, setIsPaymentVisible] = useState<boolean>(false);
 
   return (
-    <div className="ml-[50px] flex flex-col space-y-[30px]">
-      {!isContinueButtonClicked && !isPaymentVisible && (
-        <div className=" flex flex-col space-y-[30px]">
-          {" "}
-          <div className="text-[35px] mt-[50px] font-bold">
-            Select participants
-          </div>
-          <div className="w-[550px] h-[104px]  border-1 border-gray-300 rounded-[20px] flex flex-row justify-center items-center">
-            <div className="flex flex-col text-[15px] mr-[200px] ">
-              <div>Snorkeler Youth</div>
-              <div>Ages 8-12</div>
+    <div className="flex flex-row space-x-[30px]">
+      <div className="ml-[50px] flex flex-col space-y-[30px]">
+        {!isContactFormVisible && !isPaymentVisible && (
+          <div className=" flex flex-col space-y-[30px]">
+            {" "}
+            <div className="text-[35px] mt-[50px] font-bold">
+              Select participants
             </div>
-            <div className="w-[56px] h-[32px] bg-[#EEFFCC] rounded-lg  justify-items-center  text-center mr-[30px] text-[#4D661A]">
-              $100
-            </div>
-            <div className="mr-[30px]">{participants.length}</div>
-            <button
-              className="w-[44px] cursor-pointer h-[44px] rounded-[50px] font-bold text-[20px] border-2 border-gray-200  "
-              onClick={handleAddingDivs}
-            >
-              +
-            </button>
-          </div>
-          {participants.length > 0 && (
-            <div className="w-[550px]  bg-[#F2F4F7] rounded-lg flex flex-col pl-[25px] pb-[25px] space-y-[20px] mb-[20px] ">
-              <div className="text-[#8A9099] mt-[15px]">
-                Please provide additional details for each participant
+            <div className="w-[550px] h-[104px]  border-1 border-gray-300 rounded-[20px] flex flex-row justify-center items-center">
+              <div className="flex flex-col text-[15px] mr-[200px] ">
+                <div>Snorkeler Youth</div>
+                <div>Ages 8-12</div>
               </div>
-              {participants.map((_, index) => (
-                <div
-                  key={index}
-                  className="w-[504px] pt-[20px] pb-[20px] justify-center items-center flex flex-col space-y-[20px]  bg-white rounded-lg"
-                >
-                  <div className="flex flex-row space-x-[20px]">
-                    <button
-                      className="w-[40px] h-[40px] rounded-[50px] border-2 border-gray-200 cursor-pointer"
-                      onClick={() => handleExtraForm(index)}
-                    >
-                      {extraForms[index] === false ? (
-                        <img src={down} />
-                      ) : (
-                        <img src={up} />
-                      )}
-                    </button>
-                    <div className="flex flex-col text-[15px] mr-[250px]">
-                      <div className="text-[17px]">
-                        {isFormValid[index] &&
-                        participantName[index] &&
-                        participantSurName[index] ? (
-                          <span className="flex flex-row space-x-[5px]">
-                            <p>{participantName[index]}</p>
-                            <p>{participantSurName[index]}</p>
-                          </span>
-                        ) : (
-                          <p>Participant {index + 1}</p>
-                        )}
-                      </div>
-                      <div className="text-[#8A9099]">Snorkeler Youth</div>
-                    </div>
-                    <p className="mt-[12px]">
-                      <img
-                        className="w-[24px] h-[24px]"
-                        src={isFormValid[index] ? safe : warning}
-                      />
-                    </p>
-                    <button
-                      className="cursor-pointer"
-                      onClick={() => handleRemovingDivs(index)}
-                    >
-                      <img className="w-[24px] h-[24px]" src={bin} alt="bin" />
-                    </button>
-                  </div>
-                  {extraForms[index] && (
-                    <Form
-                      onShowChange={(childShow) =>
-                        handleShowChange(index, childShow)
-                      }
-                      showsForm={shows[index]}
-                      participantIndex={index}
-                      onFormValidChange={handleFormValidChange}
-                      onParticipantNameChange={(index, name, surName) =>
-                        handleParticipantNameChange(index, name, surName)
-                      }
-                    />
-                  )}
-                </div>
-              ))}
+              <div className="w-[56px] h-[32px] bg-[#EEFFCC] rounded-lg  justify-items-center  text-center mr-[30px] text-[#4D661A]">
+                $100
+              </div>
+              <div className="mr-[30px]">{participants.length}</div>
+              <button
+                className="w-[44px] cursor-pointer h-[44px] rounded-[50px] font-bold text-[20px] border-2 border-gray-200  "
+                onClick={handleAddingDivs}
+              >
+                +
+              </button>
             </div>
-          )}
-        </div>
-      )}
-      {isContinueButtonClicked && !isPaymentVisible && (
-        <ContactForm onContactValidationChange={onContactFormValidChange} />
-      )}
-      {isPaymentVisible && <Payment />}
+            {participants.length > 0 && (
+              <div className="w-[550px]  bg-[#F2F4F7] rounded-lg flex flex-col pl-[25px] pb-[25px] space-y-[20px] mb-[20px] ">
+                <div className="text-[#8A9099] mt-[15px]">
+                  Please provide additional details for each participant
+                </div>
+                {participants.map((_, index) => (
+                  <div
+                    key={index}
+                    className="w-[504px] pt-[20px] pb-[20px] justify-center items-center flex flex-col space-y-[20px]  bg-white rounded-lg"
+                  >
+                    <div className="flex flex-row space-x-[20px]">
+                      <button
+                        className="w-[40px] h-[40px] rounded-[50px] border-2 border-gray-200 cursor-pointer"
+                        onClick={() => handleExtraForm(index)}
+                      >
+                        {extraForms[index] === false ? (
+                          <img src={down} />
+                        ) : (
+                          <img src={up} />
+                        )}
+                      </button>
+                      <div className="flex flex-col text-[15px] mr-[250px]">
+                        <div className="text-[17px]">
+                          {isFormValid[index] &&
+                          participantName[index] &&
+                          participantSurName[index] ? (
+                            <span className="flex flex-row space-x-[5px]">
+                              <p>{participantName[index]}</p>
+                              <p>{participantSurName[index]}</p>
+                            </span>
+                          ) : (
+                            <p>Participant {index + 1}</p>
+                          )}
+                        </div>
+                        <div className="text-[#8A9099]">Snorkeler Youth</div>
+                      </div>
+                      <p className="mt-[12px]">
+                        <img
+                          className="w-[24px] h-[24px]"
+                          src={isFormValid[index] ? safe : warning}
+                        />
+                      </p>
+                      <button
+                        className="cursor-pointer"
+                        onClick={() => handleRemovingDivs(index)}
+                      >
+                        <img
+                          className="w-[24px] h-[24px]"
+                          src={bin}
+                          alt="bin"
+                        />
+                      </button>
+                    </div>
+                    {extraForms[index] && (
+                      <Form
+                        onShowChange={(childShow) =>
+                          handleShowChange(index, childShow)
+                        }
+                        showsForm={shows[index]}
+                        participantIndex={index}
+                        onFormValidChange={handleFormValidChange}
+                        onParticipantNameChange={(index, name, surName) =>
+                          handleParticipantNameChange(index, name, surName)
+                        }
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        {isContactFormVisible && !isPaymentVisible && (
+          <ContactForm onContactValidationChange={setIsContactFormValid} />
+        )}
+        {isPaymentVisible && <Payment />}
+      </div>
+      <Cart
+        isFormValid={formValidChange}
+        onContinueClick={handleContactFormVisibility}
+        isContactFormValid={isContactFormValid}
+        onPaymentVisibilityChange={setIsPaymentVisible}
+      />
     </div>
   );
 };

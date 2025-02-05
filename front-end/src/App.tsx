@@ -1,45 +1,12 @@
-import { useState } from "react";
-import Cart from "./components/Cart";
 import Participants from "./components/Participants";
 import ProgressBar from "./components/ProgressBar";
 
 function App() {
-  const [isFormValid, setIsFormValid] = useState<boolean>(false);
-  const [isContactFormVisible, setIsContactFormVisible] =
-    useState<boolean>(false);
-  const [isContactFormValid, setIsContactFormValid] = useState<boolean>(false);
-  const [isPaymentVisible, setIsPaymentVisible] = useState<boolean>(false);
-
-  const handleContinueClick = (): void => {
-    setIsContactFormVisible(true);
-  };
-
-  const handleContactFormValidation = (isValid: boolean): void => {
-    setIsContactFormValid(isValid);
-  };
-
-  const handlePaymentVisibility = (isVisible: boolean): void => {
-    setIsPaymentVisible(isVisible);
-  };
-
   return (
     <>
       <div className="flex flex-col min-h-screen mb-[10px] ml-[200px] mt-[20px] space-y-[20px]  border-1 border-gray-300 rounded-[20px] w-[1100px] ">
         <ProgressBar />
-        <div className="flex flex-row space-x-[30px]">
-          <Participants
-            onFormValidChange={setIsFormValid}
-            isContinueButtonClicked={isContactFormVisible}
-            onContactFormValidChange={handleContactFormValidation}
-            isPaymentVisible={isPaymentVisible}
-          />
-          <Cart
-            isFormValid={isFormValid}
-            onContinueClick={handleContinueClick}
-            isContactFormValid={isContactFormValid}
-            onPaymentVisibilityChange={handlePaymentVisibility}
-          />
-        </div>
+        <Participants />
       </div>
     </>
   );
