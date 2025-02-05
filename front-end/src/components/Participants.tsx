@@ -15,7 +15,7 @@ import Payment from "./Payment";
 
 interface ParticipantsProps {
   onFormValidChange: (isValid: boolean) => void;
-  isSubmitButtonClicked: boolean;
+  // isSubmitButtonClicked: boolean;
   isContinueButtonClicked: boolean;
   onContactFormValidChange: (isValid: boolean) => void;
   isPaymentVisible: boolean;
@@ -26,19 +26,17 @@ const Participants: React.FC<ParticipantsProps> = ({
   isContinueButtonClicked,
   onContactFormValidChange,
   isPaymentVisible,
-  isSubmitButtonClicked,
+  // isSubmitButtonClicked,
 }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const participants = useSelector(
     (state: RootState) => state.participants.participants
   );
-  const dispatch = useDispatch<AppDispatch>();
   const [extraForms, setExtraForms] = useState<boolean[]>([]);
   const [shows, setShows] = useState<boolean[]>([]);
-
   const [isFormValid, setIsFormValid] = useState<boolean[]>(
     new Array(participants.length).fill(false)
   );
-
   const [participantName, setParticipantName] = useState<string[]>([]);
   const [participantSurName, setParticipantSurName] = useState<string[]>([]);
 
@@ -66,8 +64,8 @@ const Participants: React.FC<ParticipantsProps> = ({
   };
 
   const handleShowChange = (index: number, childShow: boolean) => {
-    setShows(
-      (prev) => prev.map((shows, i) => (i === index ? childShow : shows)) // Update the specific show
+    setShows((prev) =>
+      prev.map((shows, i) => (i === index ? childShow : shows))
     );
   };
 
@@ -174,7 +172,6 @@ const Participants: React.FC<ParticipantsProps> = ({
                       showsForm={shows[index]}
                       participantIndex={index}
                       onFormValidChange={handleFormValidChange}
-                      isSubmitButtonClicked={isSubmitButtonClicked}
                       onParticipantNameChange={(index, name, surName) =>
                         handleParticipantNameChange(index, name, surName)
                       }
@@ -187,10 +184,7 @@ const Participants: React.FC<ParticipantsProps> = ({
         </div>
       )}
       {isContinueButtonClicked && !isPaymentVisible && (
-        <ContactForm
-          onContactValidationChange={onContactFormValidChange}
-          isSubmitButtonClicked={isSubmitButtonClicked}
-        />
+        <ContactForm onContactValidationChange={onContactFormValidChange} />
       )}
       {isPaymentVisible && <Payment />}
     </div>

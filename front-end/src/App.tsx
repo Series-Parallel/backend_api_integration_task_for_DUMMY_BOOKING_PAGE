@@ -5,17 +5,10 @@ import ProgressBar from "./components/ProgressBar";
 
 function App() {
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
-  const [isSubmitButtonClicked, setIsSubmitButtonClicked] =
-    useState<boolean>(false);
   const [isContactFormVisible, setIsContactFormVisible] =
     useState<boolean>(false);
   const [isContactFormValid, setIsContactFormValid] = useState<boolean>(false);
   const [isPaymentVisible, setIsPaymentVisible] = useState<boolean>(false);
-
-  const handleSubmitButtonClick = (): void => {
-    console.log("isSubmitButtonClicked BEFORE:", isSubmitButtonClicked);
-    setIsSubmitButtonClicked(true);
-  };
 
   const handleContinueClick = (): void => {
     setIsContactFormVisible(true);
@@ -36,7 +29,6 @@ function App() {
         <div className="flex flex-row space-x-[30px]">
           <Participants
             onFormValidChange={setIsFormValid}
-            isSubmitButtonClicked={isSubmitButtonClicked}
             isContinueButtonClicked={isContactFormVisible}
             onContactFormValidChange={handleContactFormValidation}
             isPaymentVisible={isPaymentVisible}
@@ -46,7 +38,6 @@ function App() {
             onContinueClick={handleContinueClick}
             isContactFormValid={isContactFormValid}
             onPaymentVisibilityChange={handlePaymentVisibility}
-            onSubmitClicked={handleSubmitButtonClick}
           />
         </div>
       </div>

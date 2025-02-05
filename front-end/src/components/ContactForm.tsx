@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { contactSchema } from "../schemas/ContactIndex";
 import { useFormik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
 
 interface ContactFormProps {
   onContactValidationChange: (isValid: boolean) => void;
-  isSubmitButtonClicked: boolean;
 }
 
 const ContactForm: React.FC<ContactFormProps> = ({
   onContactValidationChange,
-  isSubmitButtonClicked,
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -52,12 +52,18 @@ const ContactForm: React.FC<ContactFormProps> = ({
     isValid,
   ]);
 
+  const dispatch = useDispatch();
+  const isSubmitButtonClicked = useSelector(
+    (state: RootState) => state.submitButton.isSubmitButtonClicked
+  );
   useEffect(() => {
     if (isSubmitButtonClicked) {
-      console.log("Submitting form CF...");
-      formik.submitForm();
+      console.log("Submitting form CF....");
+      formik.submitForm().then(() => {
+        console.log("Submitting ContactForm..");
+      });
     }
-  }, [isSubmitButtonClicked]);
+  }, [isSubmitButtonClicked, dispatch]);
 
   console.log(formik);
   console.log(formik.errors);

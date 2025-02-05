@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { RootState } from "../store";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import store, { RootState } from "../store";
+import { useDispatch, useSelector } from "react-redux";
+import { setSubmitButtonClicked } from "../store/submitButton-slice";
 
 interface CartProps {
   isFormValid: boolean;
   onContinueClick: () => void;
   isContactFormValid: boolean;
   onPaymentVisibilityChange: (isVisible: boolean) => void;
-  onSubmitClicked: (isSubmit: boolean) => void;
 }
 
 const Cart: React.FC<CartProps> = ({
@@ -15,15 +15,16 @@ const Cart: React.FC<CartProps> = ({
   onContinueClick,
   isContactFormValid,
   onPaymentVisibilityChange,
-  onSubmitClicked,
 }) => {
+  const dispatch = useDispatch();
   const participants = useSelector(
     (state: RootState) => state.participants.participants
-  ); // Getting the participants array from the store
-
+  );
+  const isSubmitButtonClicked = useSelector(
+    (state: RootState) => state.submitButton.isSubmitButtonClicked
+  );
   const [isFormValidHere, setIsFormValidHere] = useState<boolean>(true);
-
-  const numberOfItems = participants.length; // Number of items is now the length of the participants array
+  const numberOfItems = participants.length;
 
   const handleContinueButtonClick = () => {
     if (isFormValid && isFormValidHere && !isContactFormValid) {
@@ -37,10 +38,23 @@ const Cart: React.FC<CartProps> = ({
     }
 
     if (isContactFormValid && isFormValidHere) {
-      console.log("Submitting Forms...");
-      setTimeout(() => onSubmitClicked(true), 0);
+      console.log("Before Dispatch:", isSubmitButtonClicked);
+      dispatch(setSubmitButtonClicked(true));
+      setTimeout(() => {
+        console.log(
+          "After Dispatch:",
+          store.getState().submitButton.isSubmitButtonClicked
+        );
+      }, 100);
     }
   };
+
+  useEffect(() => {
+    if (isSubmitButtonClicked) {
+      console.log("Submitting Forms...");
+    }
+  }, [isSubmitButtonClicked, dispatch]);
+
   console.log("form value ", isFormValid);
   console.log("Form value here: ", isFormValidHere);
 

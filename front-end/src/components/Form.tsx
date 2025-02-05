@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
-
 import down from "../assets/down-arrow.png";
 import { schema } from "../schemas";
 import ExtraForm from "./ExtraForm";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
 
 interface FormProps {
   onShowChange: (show: boolean) => void;
   showsForm: boolean;
   onFormValidChange: (index: number, valid: boolean) => void;
-  isSubmitButtonClicked: boolean;
   onParticipantNameChange: (
     index: number,
     name: string,
@@ -22,7 +22,6 @@ const Form: React.FC<FormProps> = ({
   onShowChange,
   showsForm,
   onFormValidChange,
-  isSubmitButtonClicked,
   onParticipantNameChange,
   participantIndex,
 }) => {
@@ -84,13 +83,6 @@ const Form: React.FC<FormProps> = ({
   ]);
 
   useEffect(() => {
-    if (isSubmitButtonClicked) {
-      console.log("Submitting form F...");
-      formik.submitForm();
-    }
-  }, [isSubmitButtonClicked]);
-
-  useEffect(() => {
     if (
       isValid &&
       formik.values.firstName.trim() !== "" &&
@@ -108,7 +100,6 @@ const Form: React.FC<FormProps> = ({
   console.log(formik.errors);
 
   const [show, setShow] = useState<boolean>(false);
-
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const newShow = !showsForm;
@@ -117,6 +108,19 @@ const Form: React.FC<FormProps> = ({
   };
 
   console.log("Formik error", formik.errors);
+
+  const dispatch = useDispatch();
+  const isSubmitButtonClicked = useSelector(
+    (state: RootState) => state.submitButton.isSubmitButtonClicked
+  );
+  useEffect(() => {
+    if (isSubmitButtonClicked) {
+      console.log("Submitting form F...");
+      formik.submitForm().then(() => {
+        console.log("Main Form Submitted");
+      });
+    }
+  }, [isSubmitButtonClicked, dispatch]);
 
   return (
     <form className=" flex flex-col space-y-[10px]">
