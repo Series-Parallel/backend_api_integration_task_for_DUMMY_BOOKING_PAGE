@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import down from "../assets/down-arrow.png";
 import { schema } from "../schemas";
 import ExtraForm from "./ExtraForm";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { RootState } from "../store";
 
 interface FormProps {
@@ -109,7 +109,7 @@ const Form: React.FC<FormProps> = ({
 
   console.log("Formik error", formik.errors);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const isSubmitButtonClicked = useSelector(
     (state: RootState) => state.submitButton.isSubmitButtonClicked
   );
@@ -120,7 +120,7 @@ const Form: React.FC<FormProps> = ({
         console.log("Main Form Submitted");
       });
     }
-  }, [isSubmitButtonClicked, dispatch]);
+  }, [isSubmitButtonClicked]);
 
   return (
     <form className=" flex flex-col space-y-[10px]">
