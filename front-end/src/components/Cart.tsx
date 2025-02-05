@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import store, { RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { setSubmitButtonClicked } from "../store/submitButton-slice";
+import { setStep } from "../store/step-slice";
 
 interface CartProps {
   isFormValid: boolean;
@@ -23,21 +24,24 @@ const Cart: React.FC<CartProps> = ({
   const isSubmitButtonClicked = useSelector(
     (state: RootState) => state.submitButton.isSubmitButtonClicked
   );
+  const step = useSelector((state: RootState) => state.step.step);
   const [isFormValidHere, setIsFormValidHere] = useState<boolean>(true);
   const numberOfItems = participants.length;
 
   const handleContinueButtonClick = () => {
-    if (isFormValid && isFormValidHere && !isContactFormValid) {
+    if (step === 1 && isFormValid && isFormValidHere && !isContactFormValid) {
       setIsFormValidHere(false);
       onContinueClick();
+      dispatch(setStep(2));
     }
 
-    if (isContactFormValid && !isFormValidHere) {
+    if (step === 2 && isContactFormValid && !isFormValidHere) {
       setIsFormValidHere(true);
       onPaymentVisibilityChange(true);
+      dispatch(setStep(3));
     }
 
-    if (isContactFormValid && isFormValidHere) {
+    if (step === 3 && isContactFormValid && isFormValidHere) {
       console.log("Before Dispatch:", isSubmitButtonClicked);
       dispatch(setSubmitButtonClicked(true));
       setTimeout(() => {
