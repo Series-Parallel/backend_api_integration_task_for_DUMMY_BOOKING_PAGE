@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import down from "../assets/down-arrow.png";
 import { schema } from "../schemas";
 import ExtraForm from "./ExtraForm";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../store";
 
 interface FormProps {
