@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { contactSchema } from "../schemas/ContactIndex";
 import { useFormik } from "formik";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
+import { setContactFormData } from "../store/form-slice";
 
 interface ContactFormProps {
   onContactValidationChange: (isValid: boolean) => void;
@@ -11,7 +12,7 @@ interface ContactFormProps {
 const ContactForm: React.FC<ContactFormProps> = ({
   onContactValidationChange,
 }) => {
-  const formik = useFormik({
+  const formik2 = useFormik({
     initialValues: {
       firstName: "",
       lastName: "",
@@ -33,26 +34,31 @@ const ContactForm: React.FC<ContactFormProps> = ({
   const isSubmitButtonClicked = useSelector(
     (state: RootState) => state.submitButton.isSubmitButtonClicked
   );
+  const formData = useSelector(
+    (state: RootState) => state.form.contactFormData
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const newIsValid =
-      formik.values.firstName.trim() !== "" &&
-      formik.values.lastName.trim() !== "" &&
-      formik.values.email.trim() !== "" &&
-      formik.values.code.trim() !== "" &&
-      formik.values.phone.trim() !== "";
+      formik2.values.firstName.trim() !== "" &&
+      formik2.values.lastName.trim() !== "" &&
+      formik2.values.email.trim() !== "" &&
+      formik2.values.code.trim() !== "" &&
+      formik2.values.phone.trim() !== "";
 
     if (newIsValid !== isValid) {
       setIsValid(newIsValid);
       onContactValidationChange(newIsValid);
+      dispatch(setContactFormData({ ...formik2.values }));
     }
     console.log(" Contact Form is valid", isValid);
   }, [
-    formik.values.firstName,
-    formik.values.lastName,
-    formik.values.email,
-    formik.values.code,
-    formik.values.phone,
+    formik2.values.firstName,
+    formik2.values.lastName,
+    formik2.values.email,
+    formik2.values.code,
+    formik2.values.phone,
     isValid,
   ]);
 
@@ -60,14 +66,14 @@ const ContactForm: React.FC<ContactFormProps> = ({
   useEffect(() => {
     if (isSubmitButtonClicked) {
       console.log("Submitting form CF....");
-      formik.submitForm().then(() => {
+      formik2.submitForm().then(() => {
         console.log("Submitting ContactForm..");
       });
     }
   }, [isSubmitButtonClicked]);
 
-  console.log(formik);
-  console.log(formik.errors);
+  console.log(formik2);
+  console.log(formik2.errors);
 
   return (
     <div className="flex flex-col space-y-[20px] mb-[20px]">
@@ -76,17 +82,17 @@ const ContactForm: React.FC<ContactFormProps> = ({
       <form className="flex flex-col space-y-[10px]">
         <div className="flex flex-row space-x-[13px]">
           <input
-            value={formik.values.firstName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={formik2.values.firstName}
+            onChange={formik2.handleChange}
+            onBlur={formik2.handleBlur}
             className="w-[249px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
             name="firstName"
             placeholder="First Name"
           />
           <input
-            value={formik.values.lastName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={formik2.values.lastName}
+            onChange={formik2.handleChange}
+            onBlur={formik2.handleBlur}
             className="w-[249px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
             name="lastName"
             placeholder="Last Name"
@@ -94,8 +100,8 @@ const ContactForm: React.FC<ContactFormProps> = ({
         </div>
         <div className="flex flex-row space-x-[13px]">
           <select
-            value={formik.values.code}
-            onChange={formik.handleChange}
+            value={formik2.values.code}
+            onChange={formik2.handleChange}
             className="w-[126px] h-[56px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 "
             name="code"
           >
@@ -103,19 +109,19 @@ const ContactForm: React.FC<ContactFormProps> = ({
             <option value="+91">+91</option>
           </select>
           <input
-            value={formik.values.phone}
+            value={formik2.values.phone}
             name="phone"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            onChange={formik2.handleChange}
+            onBlur={formik2.handleBlur}
             placeholder="Phone Number"
             className="w-[371px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
           />
         </div>
         <input
-          value={formik.values.email}
+          value={formik2.values.email}
           name="email"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
+          onChange={formik2.handleChange}
+          onBlur={formik2.handleBlur}
           placeholder="Email"
           className="w-[510px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
         />
@@ -124,17 +130,17 @@ const ContactForm: React.FC<ContactFormProps> = ({
         </div>
         <div className="flex flex-row space-x-[13px]">
           <input
-            value={formik.values.eFirstName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={formik2.values.eFirstName}
+            onChange={formik2.handleChange}
+            onBlur={formik2.handleBlur}
             className="w-[249px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
             name="firstName"
             placeholder="First Name"
           />
           <input
-            value={formik.values.eLastName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={formik2.values.eLastName}
+            onChange={formik2.handleChange}
+            onBlur={formik2.handleBlur}
             className="w-[249px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
             name="lastName"
             placeholder="Last Name"
@@ -142,8 +148,8 @@ const ContactForm: React.FC<ContactFormProps> = ({
         </div>
         <div className="flex flex-row space-x-[13px]">
           <select
-            value={formik.values.ecode}
-            onChange={formik.handleChange}
+            value={formik2.values.ecode}
+            onChange={formik2.handleChange}
             className="w-[126px] h-[56px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 "
             name="ecode"
           >
@@ -152,9 +158,9 @@ const ContactForm: React.FC<ContactFormProps> = ({
           </select>
           <input
             name="ephone"
-            value={formik.values.ephone}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={formik2.values.ephone}
+            onChange={formik2.handleChange}
+            onBlur={formik2.handleBlur}
             placeholder="Phone"
             className="w-[371px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
           />

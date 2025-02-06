@@ -3,8 +3,9 @@ import { useFormik } from "formik";
 import down from "../assets/down-arrow.png";
 import { schema } from "../schemas";
 import ExtraForm from "./ExtraForm";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
+import { setMainFormData } from "../store/form-slice";
 
 interface FormProps {
   onShowChange: (show: boolean) => void;
@@ -25,7 +26,7 @@ const Form: React.FC<FormProps> = ({
   onParticipantNameChange,
   participantIndex,
 }) => {
-  const formik = useFormik({
+  const formik1 = useFormik({
     initialValues: {
       firstName: "",
       lastName: "",
@@ -60,49 +61,52 @@ const Form: React.FC<FormProps> = ({
   const isSubmitButtonClicked = useSelector(
     (state: RootState) => state.submitButton.isSubmitButtonClicked
   );
+  const formData = useSelector((state: RootState) => state.form.mainFormData);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const newIsValid =
-      formik.values.firstName.trim() !== "" &&
-      formik.values.lastName.trim() !== "" &&
-      formik.values.dateOfBirth.trim() !== "" &&
-      formik.values.gender.trim() !== "" &&
-      formik.values.proof === true &&
-      formik.values.notFlying === true &&
-      formik.values.notPregnant === true;
+      formik1.values.firstName.trim() !== "" &&
+      formik1.values.lastName.trim() !== "" &&
+      formik1.values.dateOfBirth.trim() !== "" &&
+      formik1.values.gender.trim() !== "" &&
+      formik1.values.proof === true &&
+      formik1.values.notFlying === true &&
+      formik1.values.notPregnant === true;
 
     if (newIsValid !== isValid) {
       setIsValid(newIsValid);
       onFormValidChange(participantIndex, newIsValid);
+      dispatch(setMainFormData({ ...formik1.values }));
     }
     console.log("Form is valid", isValid);
   }, [
-    formik.values.firstName,
-    formik.values.lastName,
-    formik.values.dateOfBirth,
-    formik.values.gender,
-    formik.values.proof,
-    formik.values.notFlying,
-    formik.values.notPregnant,
+    formik1.values.firstName,
+    formik1.values.lastName,
+    formik1.values.dateOfBirth,
+    formik1.values.gender,
+    formik1.values.proof,
+    formik1.values.notFlying,
+    formik1.values.notPregnant,
     isValid,
   ]);
 
   useEffect(() => {
     if (
       isValid &&
-      formik.values.firstName.trim() !== "" &&
-      formik.values.lastName.trim() !== ""
+      formik1.values.firstName.trim() !== "" &&
+      formik1.values.lastName.trim() !== ""
     ) {
       onParticipantNameChange(
         participantIndex,
-        formik.values.firstName,
-        formik.values.lastName
+        formik1.values.firstName,
+        formik1.values.lastName
       );
     }
-  }, [isValid, formik.values.firstName]);
+  }, [isValid, formik1.values.firstName]);
 
-  console.log(formik);
-  console.log(formik.errors);
+  console.log(formik1);
+  console.log(formik1.errors);
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -111,13 +115,13 @@ const Form: React.FC<FormProps> = ({
     onShowChange(newShow);
   };
 
-  console.log("Formik error", formik.errors);
+  console.log("Formik error", formik1.errors);
 
   // const dispatch = useDispatch();
   useEffect(() => {
     if (isSubmitButtonClicked) {
       console.log("Submitting form F...");
-      formik.submitForm().then(() => {
+      formik1.submitForm().then(() => {
         console.log("Main Form Submitted");
       });
     }
@@ -130,15 +134,15 @@ const Form: React.FC<FormProps> = ({
           <input
             type="text"
             name="firstName"
-            value={formik.values.firstName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={formik1.values.firstName}
+            onChange={formik1.handleChange}
+            onBlur={formik1.handleBlur}
             placeholder="First Name"
             className="w-[221px] font-semibold h-[52px] pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
           />
-          {formik.touched.firstName && formik.errors.firstName && (
+          {formik1.touched.firstName && formik1.errors.firstName && (
             <p className=" ml-[10px] text-red-400  text-[10px] h-[14px]">
-              {formik.errors.firstName}
+              {formik1.errors.firstName}
             </p>
           )}
         </div>
@@ -146,15 +150,15 @@ const Form: React.FC<FormProps> = ({
           <input
             type="text"
             name="lastName"
-            value={formik.values.lastName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={formik1.values.lastName}
+            onChange={formik1.handleChange}
+            onBlur={formik1.handleBlur}
             placeholder="Last Name"
             className="w-[227px] font-semibold h-[52px]  pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
           />
-          {formik.touched.lastName && formik.errors.lastName && (
+          {formik1.touched.lastName && formik1.errors.lastName && (
             <p className="ml-[10px] text-red-400  text-[10px] h-[14px]">
-              {formik.errors.lastName}
+              {formik1.errors.lastName}
             </p>
           )}
         </div>
@@ -163,16 +167,16 @@ const Form: React.FC<FormProps> = ({
         <input
           type="text"
           name="dateOfBirth"
-          value={formik.values.dateOfBirth}
-          onChange={formik.handleChange}
+          value={formik1.values.dateOfBirth}
+          onChange={formik1.handleChange}
           placeholder="Date of Birth"
           onFocus={(e) => (e.target.type = "date")}
           onBlur={(e) => (e.target.type = "text")}
           className="w-[459px] h-[56px] font-semibold pl-[10px] placeholder-gray-400 border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
         />
-        {formik.touched.dateOfBirth && formik.errors.dateOfBirth && (
+        {formik1.touched.dateOfBirth && formik1.errors.dateOfBirth && (
           <p className="ml-[10px] text-red-400 text-[10px]">
-            {formik.errors.dateOfBirth}
+            {formik1.errors.dateOfBirth}
           </p>
         )}
       </div>
@@ -180,8 +184,8 @@ const Form: React.FC<FormProps> = ({
       <div className="w-[459px]">
         <select
           name="gender"
-          value={formik.values.gender}
-          onChange={formik.handleChange}
+          value={formik1.values.gender}
+          onChange={formik1.handleChange}
           aria-placeholder="Gender"
           className="w-full font-semibold h-[56px] pl-[10px] pr-[30px] border border-gray-400 rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
         >
@@ -198,8 +202,10 @@ const Form: React.FC<FormProps> = ({
             type="checkbox"
             className="form-checkbox"
             name="proof"
-            onChange={formik.handleChange}
-            onClick={() => formik.setFieldValue("proof", !formik.values.proof)}
+            onChange={formik1.handleChange}
+            onClick={() =>
+              formik1.setFieldValue("proof", !formik1.values.proof)
+            }
           />
           <span>I can provide proof of certification</span>
         </label>
@@ -209,9 +215,9 @@ const Form: React.FC<FormProps> = ({
             type="checkbox"
             className="form-checkbox"
             name="notFlying"
-            onChange={formik.handleChange}
+            onChange={formik1.handleChange}
             onClick={() =>
-              formik.setFieldValue("notFlying", !formik.values.notFlying)
+              formik1.setFieldValue("notFlying", !formik1.values.notFlying)
             }
           />
           <span className="text-balance">
@@ -225,9 +231,9 @@ const Form: React.FC<FormProps> = ({
             type="checkbox"
             className="form-checkbox"
             name="notPregnant"
-            onChange={formik.handleChange}
+            onChange={formik1.handleChange}
             onClick={() =>
-              formik.setFieldValue("notPregnant", !formik.values.notPregnant)
+              formik1.setFieldValue("notPregnant", !formik1.values.notPregnant)
             }
           />
           <span>I am not pregnant (scuba tours)</span>
@@ -247,7 +253,7 @@ const Form: React.FC<FormProps> = ({
       </div>
 
       {/* this one is optional */}
-      {show && <ExtraForm formik={formik} />}
+      {show && <ExtraForm formik={formik1} />}
       <div className="w-[459px] mt-[10px] border-1 border-gray-300 "></div>
     </form>
   );

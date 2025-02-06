@@ -3,6 +3,7 @@ import store, { RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { setSubmitButtonClicked } from "../store/submitButton-slice";
 import { setStep } from "../store/step-slice";
+import { setCombineFormData } from "../store/form-slice";
 
 interface CartProps {
   isFormValid: boolean;
@@ -43,6 +44,7 @@ const Cart: React.FC<CartProps> = ({
 
     if (step === 3 && isContactFormValid && isFormValidHere) {
       console.log("Before Dispatch:", isSubmitButtonClicked);
+      dispatch(setCombineFormData());
       dispatch(setSubmitButtonClicked(true));
       setTimeout(() => {
         console.log(
