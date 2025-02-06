@@ -72,8 +72,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
     }
   }, [isSubmitButtonClicked]);
 
-  console.log(formik2);
-  console.log(formik2.errors);
+
 
   return (
     <div className="flex flex-col space-y-[20px] mb-[20px]">

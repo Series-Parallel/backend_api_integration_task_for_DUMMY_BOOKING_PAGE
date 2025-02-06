@@ -33,6 +33,7 @@ const Participants: React.FC<ParticipantsProps> = () => {
     useState<boolean>(false);
   const [isContactFormValid, setIsContactFormValid] = useState<boolean>(false);
   const [isPaymentVisible, setIsPaymentVisible] = useState<boolean>(false);
+  const step = useSelector((state: RootState) => state.step.step);
 
   const handleExtraForm = (index: number) => {
     setExtraForms((prev) =>
@@ -92,7 +93,7 @@ const Participants: React.FC<ParticipantsProps> = () => {
   return (
     <div className="flex flex-row space-x-[30px]">
       <div className="ml-[50px] flex flex-col space-y-[30px]">
-        {!isContactFormVisible && !isPaymentVisible && (
+        {step === 1 && (
           <div className=" flex flex-col space-y-[30px]">
             {" "}
             <div className="text-[35px] mt-[50px] font-bold">
@@ -186,10 +187,10 @@ const Participants: React.FC<ParticipantsProps> = () => {
             )}
           </div>
         )}
-        {isContactFormVisible && !isPaymentVisible && (
+        {step === 2 && (
           <ContactForm onContactValidationChange={setIsContactFormValid} />
         )}
-        {isPaymentVisible && <Payment />}
+        {step === 3 && <Payment />}
       </div>
       <Cart
         isFormValid={formValidChange}

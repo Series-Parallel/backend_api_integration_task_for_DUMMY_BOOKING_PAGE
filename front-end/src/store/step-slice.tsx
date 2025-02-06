@@ -15,8 +15,13 @@ const stepSlice = createSlice({
     setStep: (state, action: PayloadAction<number>) => {
       state.step = action.payload;
     },
+    decreseStep: (state) => {
+      if (state.step > 0) {
+        state.step -= 1;
+      }
+    },
   },
 });
 
-export const { setStep } = stepSlice.actions;
+export const { setStep, decreseStep } = stepSlice.actions;
 export default stepSlice.reducer;

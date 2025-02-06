@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import store, { RootState } from "../store";
+import { AppDispatch, RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { setSubmitButtonClicked } from "../store/submitButton-slice";
 import { setStep } from "../store/step-slice";
-import { setCombineFormData } from "../store/form-slice";
+import { postBooking, setCombineFormData } from "../store/form-slice";
 
 interface CartProps {
   isFormValid: boolean;
@@ -18,7 +18,7 @@ const Cart: React.FC<CartProps> = ({
   isContactFormValid,
   onPaymentVisibilityChange,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const participants = useSelector(
     (state: RootState) => state.participants.participants
   );
@@ -46,12 +46,10 @@ const Cart: React.FC<CartProps> = ({
       console.log("Before Dispatch:", isSubmitButtonClicked);
       dispatch(setCombineFormData());
       dispatch(setSubmitButtonClicked(true));
+      dispatch(setSubmitButtonClicked(true));
       setTimeout(() => {
-        console.log(
-          "After Dispatch:",
-          store.getState().submitButton.isSubmitButtonClicked
-        );
-      }, 100);
+        dispatch(postBooking());
+      }, 200);
     }
   };
 
@@ -60,9 +58,6 @@ const Cart: React.FC<CartProps> = ({
       console.log("Submitting Forms...");
     }
   }, [isSubmitButtonClicked, dispatch]);
-
-  console.log("form value ", isFormValid);
-  console.log("Form value here: ", isFormValidHere);
 
   const isContinueButtonEnabled =
     (isFormValid && isFormValidHere) || isContactFormValid;

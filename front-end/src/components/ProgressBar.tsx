@@ -1,13 +1,19 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 
 import left from "../assets/left.png";
+import { decreseStep } from "../store/step-slice";
 
 const steps = ["Participants", "Contact", "Payment"];
 
 const ProgressBar: React.FC = () => {
   const progress = useSelector((state: RootState) => state.step.step);
+  const dispatch = useDispatch();
+
+  const handleOnBackClick = () => {
+    dispatch(decreseStep());
+  };
 
   return (
     <div className="flex flex-col mt-[20px] ">
@@ -15,6 +21,7 @@ const ProgressBar: React.FC = () => {
         <button
           className="flex flex-row  font-bold cursor-pointer"
           disabled={progress <= 1}
+          onClick={handleOnBackClick}
         >
           <div className="w-[40px] h-[40px] rounded-[50px] mr-[10px]  border-2 border-gray-500">
             <img src={left} />

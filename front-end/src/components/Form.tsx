@@ -105,8 +105,7 @@ const Form: React.FC<FormProps> = ({
     }
   }, [isValid, formik1.values.firstName]);
 
-  console.log(formik1);
-  console.log(formik1.errors);
+
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
