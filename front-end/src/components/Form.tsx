@@ -61,7 +61,6 @@ const Form: React.FC<FormProps> = ({
   const isSubmitButtonClicked = useSelector(
     (state: RootState) => state.submitButton.isSubmitButtonClicked
   );
-  const formData = useSelector((state: RootState) => state.form.mainFormData);
   const dispatch = useDispatch();
 
   useEffect(() => {

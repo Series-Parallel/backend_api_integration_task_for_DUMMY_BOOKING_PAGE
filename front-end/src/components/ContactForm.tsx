@@ -34,9 +34,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
   const isSubmitButtonClicked = useSelector(
     (state: RootState) => state.submitButton.isSubmitButtonClicked
   );
-  const formData = useSelector(
-    (state: RootState) => state.form.contactFormData
-  );
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -71,8 +69,6 @@ const ContactForm: React.FC<ContactFormProps> = ({
       });
     }
   }, [isSubmitButtonClicked]);
-
-
 
   return (
     <div className="flex flex-col space-y-[20px] mb-[20px]">
