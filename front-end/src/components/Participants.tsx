@@ -1,7 +1,7 @@
 import { RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../store";
-import { addParticipant, removeParticipant } from "../store/participants-slice";
+// import { addParticipant, removeParticipant } from "../store/participants-slice";
 import { useState } from "react";
 import Form from "./Form";
 
@@ -13,13 +13,17 @@ import safe from "../assets/check-mark.png";
 import ContactForm from "./ContactForm";
 import Payment from "./Payment";
 import Cart from "./Cart";
+import {
+  addParticipantNew,
+  removeParticipantNew,
+} from "../store/newFinal-slice";
 
 interface ParticipantsProps {}
 
 const Participants: React.FC<ParticipantsProps> = () => {
   const dispatch = useDispatch<AppDispatch>();
   const participants = useSelector(
-    (state: RootState) => state.participants.participants
+    (state: RootState) => state.booking.participants
   );
   const [extraForms, setExtraForms] = useState<boolean[]>([]);
   const [shows, setShows] = useState<boolean[]>([]);
@@ -42,8 +46,9 @@ const Participants: React.FC<ParticipantsProps> = () => {
   };
 
   const handleAddingDivs = () => {
-    const newParticipant = `Participant ${participants.length + 1}`;
-    dispatch(addParticipant(newParticipant));
+    // const newParticipant = `Participant ${participants.length + 1}`;
+    // dispatch(addParticipant(newParticipant));
+    dispatch(addParticipantNew());
     setExtraForms((prev) => [...prev, false]);
     setShows((prev) => [...prev, false]);
     setIsFormValid((prev) => [...prev, false]);
@@ -51,7 +56,8 @@ const Participants: React.FC<ParticipantsProps> = () => {
 
   const handleRemovingDivs = (index: number) => {
     console.log("Index passed:", index);
-    dispatch(removeParticipant(index));
+    // dispatch(removeParticipant(index));
+    dispatch(removeParticipantNew(index));
     setExtraForms((prev) => prev.filter((_, i) => i !== index));
     setShows((prev) => prev.filter((_, i) => i !== index));
     setIsFormValid((prev) => prev.filter((_, i) => i !== index));
@@ -99,6 +105,7 @@ const Participants: React.FC<ParticipantsProps> = () => {
             {" "}
             <div className="text-[35px] mt-[50px] font-bold">
               Select participants
+              <div>Number of Participants: {participants.length}</div>
             </div>
             <div className="w-[550px] h-[104px]  border-1 border-gray-300 rounded-[20px] flex flex-row justify-center items-center">
               <div className="flex flex-col text-[15px] mr-[200px] ">

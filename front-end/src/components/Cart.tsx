@@ -20,7 +20,7 @@ const Cart: React.FC<CartProps> = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const participants = useSelector(
-    (state: RootState) => state.participants.participants
+    (state: RootState) => state.booking.participants
   );
   const isSubmitButtonClicked = useSelector(
     (state: RootState) => state.submitButton.isSubmitButtonClicked
