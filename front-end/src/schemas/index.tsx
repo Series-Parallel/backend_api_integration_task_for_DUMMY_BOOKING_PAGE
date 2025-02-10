@@ -14,6 +14,7 @@ export const schema = yup.object().shape({
     .boolean()
     .oneOf([true])
     .required("This field should be checked!"),
+  needsGear: yup.boolean().oneOf([true, false]).required(),
   weight: yup.number().notRequired(),
   weightUnit: yup.string().oneOf(["kg", "lbs"]).notRequired(),
   height: yup.number().notRequired(),

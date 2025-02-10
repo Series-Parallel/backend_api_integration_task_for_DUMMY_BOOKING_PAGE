@@ -14,13 +14,13 @@ const ContactForm: React.FC<ContactFormProps> = ({
 }) => {
   const formik2 = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      code: "",
-      phone: "",
+      firstName: "Draven",
+      lastName: "Noxus",
+      code: "+1",
+      phone: "9824169217",
       eFirstName: "",
       eLastName: "",
-      email: "",
+      email: "draven11@gmail.com",
       ecode: "",
       ephone: "",
     },
@@ -50,7 +50,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
       onContactValidationChange(newIsValid);
       dispatch(setContactFormData({ ...formik2.values }));
     }
-    console.log(" Contact Form is valid", isValid);
+   
   }, [
     formik2.values.firstName,
     formik2.values.lastName,

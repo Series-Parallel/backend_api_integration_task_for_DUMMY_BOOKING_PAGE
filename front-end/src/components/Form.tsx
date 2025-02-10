@@ -28,10 +28,10 @@ const Form: React.FC<FormProps> = ({
 }) => {
   const formik1 = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      dateOfBirth: "",
-      gender: "",
+      firstName: "Deo",
+      lastName: "Pathak",
+      dateOfBirth: "11-09-2003",
+      gender: "Male",
       proof: false,
       notFlying: false,
       notPregnant: false,
@@ -49,6 +49,7 @@ const Form: React.FC<FormProps> = ({
       bcd: false,
       wetsuit: false,
       regulator: false,
+      needsGear: false,
     },
     onSubmit: (values) => {
       console.log("Form Submitted", values);
@@ -78,7 +79,6 @@ const Form: React.FC<FormProps> = ({
       onFormValidChange(participantIndex, newIsValid);
       dispatch(setMainFormData({ ...formik1.values }));
     }
-    console.log("Form is valid", isValid);
   }, [
     formik1.values.firstName,
     formik1.values.lastName,
@@ -104,16 +104,14 @@ const Form: React.FC<FormProps> = ({
     }
   }, [isValid, formik1.values.firstName]);
 
-
-
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const newShow = !showsForm;
     setShow(newShow);
     onShowChange(newShow);
+    const newNeedsGearValue = !formik1.values.needsGear;
+    formik1.setFieldValue("needsGear", newNeedsGearValue);
   };
-
-  console.log("Formik error", formik1.errors);
 
   // const dispatch = useDispatch();
   useEffect(() => {
@@ -243,7 +241,7 @@ const Form: React.FC<FormProps> = ({
         <button
           onClick={handleButtonClick}
           className={`w-[40px] h-[40px] mt-[5px] cursor-pointer rounded-[50px] ${
-            show ? "bg-green-500" : "bg-gray-500"
+            formik1.values.needsGear ? "bg-green-500" : "bg-gray-500"
           }`}
         >
           <img src={down} />
@@ -251,7 +249,7 @@ const Form: React.FC<FormProps> = ({
       </div>
 
       {/* this one is optional */}
-      {show && <ExtraForm formik={formik1} />}
+      {formik1.values.needsGear && <ExtraForm formik={formik1} />}
       <div className="w-[459px] mt-[10px] border-1 border-gray-300 "></div>
     </form>
   );

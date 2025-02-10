@@ -46,6 +46,7 @@ const Participants: React.FC<ParticipantsProps> = () => {
     dispatch(addParticipant(newParticipant));
     setExtraForms((prev) => [...prev, false]);
     setShows((prev) => [...prev, false]);
+    setIsFormValid((prev) => [...prev, false]);
   };
 
   const handleRemovingDivs = (index: number) => {
