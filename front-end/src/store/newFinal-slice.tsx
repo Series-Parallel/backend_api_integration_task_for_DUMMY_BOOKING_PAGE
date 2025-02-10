@@ -110,15 +110,56 @@ const bookingSlice = createSlice({
     },
 
     // Update a participant by index
-    updateParticipant(
+    // updateParticipant(
+    //   state,
+    //   action: PayloadAction<{ index: number; participant: Participant }>
+    // ) {
+    //   const { index, participant } = action.payload;
+    //   state.participants[index] = participant;
+    // },
+
+    setPersonalInfo(
       state,
-      action: PayloadAction<{ index: number; participant: Participant }>
+      action: PayloadAction<{
+        index: number;
+        firstName: string;
+        lastName: string;
+        dob: string;
+        gender: string;
+      }>
     ) {
-      const { index, participant } = action.payload;
-      state.participants[index] = participant;
+      const { index, firstName, lastName, dob, gender } = action.payload;
+      if (state.participants[index]) {
+        state.participants[index].personalInfo = {
+          firstName,
+          lastName,
+          dob,
+          gender,
+        };
+        console.log("Personal info", state.participants[index].personalInfo);
+      }
+    },
+    setIsDeclarationsProvided(state, action: PayloadAction<number>) {
+      if (state.participants[action.payload]) {
+        state.participants[action.payload].isDeclarationsProvided = true;
+        console.log(
+          "Declaration",
+          state.participants[action.payload].isDeclarationsProvided
+        );
+      }
+    },
+    setParticipantNeedsGear(state, action: PayloadAction<number>) {
+      if (state.participants[action.payload]) {
+        state.participants[action.payload].diverDetails.needsGear = true;
+      }
     },
   },
 });
 
-export const { addParticipantNew, removeParticipantNew } = bookingSlice.actions;
+export const {
+  addParticipantNew,
+  removeParticipantNew,
+  setPersonalInfo,
+  setIsDeclarationsProvided,
+} = bookingSlice.actions;
 export default bookingSlice.reducer;

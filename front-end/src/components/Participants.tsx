@@ -10,7 +10,7 @@ import up from "../assets/up-arrow.png";
 import bin from "../assets/bin.png";
 import warning from "../assets/warning.png";
 import safe from "../assets/check-mark.png";
-import ContactForm from "./ContactForm";
+// import ContactForm from "./ContactForm";
 import Payment from "./Payment";
 import Cart from "./Cart";
 import {
@@ -196,7 +196,7 @@ const Participants: React.FC<ParticipantsProps> = () => {
           </div>
         )}
         {step === 2 && (
-          <ContactForm onContactValidationChange={setIsContactFormValid} />
+          <Form onContactValidationChange={setIsContactFormValid} />
         )}
         {step === 3 && <Payment />}
       </div>
