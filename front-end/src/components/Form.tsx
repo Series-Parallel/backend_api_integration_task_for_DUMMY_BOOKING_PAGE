@@ -6,7 +6,13 @@ import ExtraForm from "./ExtraForm";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import {
+  setContactFormDataNew,
+  setEmergencyContactNew,
   setIsDeclarationsProvided,
+  setParticipantBodyMeasurements,
+  setParticipantDiverDetails,
+  // setParticipantGear,
+  // setParticipantNeedsGear,
   setPersonalInfo,
 } from "../store/newFinal-slice";
 // import { setMainFormData } from "../store/form-slice";
@@ -65,6 +71,7 @@ const Form: React.FC<FormProps> = ({
       email: "draven11@gmail.com",
       ecode: "",
       ephone: "",
+      country: "United States",
     },
     onSubmit: (values) => {
       console.log("Form Submitted", values);
@@ -113,7 +120,12 @@ const Form: React.FC<FormProps> = ({
       formik.values.notPregnant === true;
 
     if (declarations) {
-      dispatch(setIsDeclarationsProvided(participantIndex ?? 0));
+      dispatch(
+        setIsDeclarationsProvided({
+          index: participantIndex ?? 0,
+          isDeclarationsProvided: true,
+        })
+      );
     }
   }, [
     formik.values.firstName,
@@ -124,6 +136,65 @@ const Form: React.FC<FormProps> = ({
     formik.values.notFlying,
     formik.values.notPregnant,
     isValid,
+  ]);
+
+  useEffect(() => {
+    const participantGear = {
+      mask: formik.values.mask,
+      snorkel: formik.values.snorkel,
+      fins: formik.values.fins,
+      boots: formik.values.boots,
+      bcd: formik.values.bcd,
+      wetsuit: formik.values.wetsuit,
+      regulator: formik.values.regulator,
+    };
+
+    const bodyMeasurements = {
+      height: {
+        height: formik.values.height || undefined,
+        heightUnit: formik.values.heightUnit || undefined,
+      },
+      weight: {
+        weight: formik.values.weight || undefined,
+        weightUnit: formik.values.weightUnit || undefined,
+      },
+      shoeSize: formik.values.shoeSize || undefined,
+      bodyType: formik.values.bodyType, // Ensure bodyType is correctly captured
+    };
+
+    const needsGear = Object.values(participantGear).some((gear) => gear);
+
+    dispatch(
+      setParticipantDiverDetails({
+        index: participantIndex ?? 0,
+        diverDetails: {
+          needsGear,
+          participantGear,
+        },
+      })
+    );
+
+    dispatch(
+      setParticipantBodyMeasurements({
+        index: participantIndex ?? 0,
+        bodyMeasurements,
+      })
+    );
+  }, [
+    formik.values.mask,
+    formik.values.bcd,
+    formik.values.snorkel,
+    formik.values.fins,
+    formik.values.wetsuit,
+    formik.values.regulator,
+    formik.values.boots,
+    formik.values.height,
+    formik.values.heightUnit,
+    formik.values.weight,
+    formik.values.weightUnit,
+    formik.values.shoeSize,
+    formik.values.bodyType,
+    formik.values.needsGear,
   ]);
 
   useEffect(() => {
@@ -145,17 +216,29 @@ const Form: React.FC<FormProps> = ({
   const [isValidContact, setIsValidContact] = useState<boolean>(false);
 
   useEffect(() => {
-    const newIsValid =
+    const contactValid =
       formik.values.cfirstName.trim() !== "" &&
       formik.values.clastName.trim() !== "" &&
       formik.values.email.trim() !== "" &&
       formik.values.code.trim() !== "" &&
       formik.values.phone.trim() !== "";
 
-    if (newIsValid !== isValidContact) {
-      setIsValidContact(newIsValid);
-      onContactValidationChange(newIsValid);
+    if (contactValid !== isValidContact) {
+      setIsValidContact(contactValid);
+      onContactValidationChange(contactValid);
       // dispatch(setContactFormData({ ...formik1.values }));
+      if (contactValid) {
+        dispatch(
+          setContactFormDataNew({
+            email: formik.values.email,
+            firstName: formik.values.cfirstName,
+            lastName: formik.values.clastName,
+            phoneNumber: formik.values.phone,
+            phoneCountryCode: formik.values.code,
+            phoneCountryName: formik.values.country,
+          })
+        );
+      }
     }
   }, [
     formik.values.cfirstName,
@@ -164,6 +247,31 @@ const Form: React.FC<FormProps> = ({
     formik.values.code,
     formik.values.phone,
     isValidContact,
+  ]);
+
+  useEffect(() => {
+    const emergencyContact =
+      formik.values.eFirstName &&
+      formik.values.eLastName &&
+      formik.values.ecode &&
+      formik.values.ephone;
+
+    if (emergencyContact) {
+      dispatch(
+        setEmergencyContactNew({
+          eFirstName: formik.values.eFirstName,
+          eLastName: formik.values.eLastName,
+          phoneCountryCode: formik.values.ecode,
+          phoneCountryName: formik.values.country, // Assuming `country` is the country name field
+        })
+      );
+    }
+  }, [
+    formik.values.eFirstName,
+    formik.values.eLastName,
+    formik.values.ecode,
+    formik.values.ephone,
+    formik.values.country,
   ]);
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -382,7 +490,7 @@ const Form: React.FC<FormProps> = ({
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className="w-[249px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
-                  name="firstName"
+                  name="eFirstName"
                   placeholder="First Name"
                 />
                 <input
@@ -390,7 +498,7 @@ const Form: React.FC<FormProps> = ({
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className="w-[249px] h-[55px] font-semibold pl-[10px] border-gray-400 border rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
-                  name="lastName"
+                  name="eLastName"
                   placeholder="Last Name"
                 />
               </div>

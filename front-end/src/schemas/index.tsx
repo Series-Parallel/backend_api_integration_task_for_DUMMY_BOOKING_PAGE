@@ -32,6 +32,7 @@ export const schema = yup.object().shape({
     .string()
     .oneOf(["Slim", "Average", "Atheletic", "Heavy"])
     .notRequired(),
+  country: yup.string().oneOf(["India", "United States"]).required(),
 
   /* optional fields*/
   mask: yup.boolean().oneOf([true, false]).notRequired(),

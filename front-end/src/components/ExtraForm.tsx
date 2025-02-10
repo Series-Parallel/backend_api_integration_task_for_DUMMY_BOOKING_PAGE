@@ -135,7 +135,7 @@ const ExtraForm: React.FC<ExtraFormProps> = ({ formik }) => {
             Body Shape
           </span>
           <select
-            name="body"
+            name="bodyType"
             value={formik.values.bodyType}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}

@@ -6,14 +6,26 @@ interface PersonalInfo {
   dob: string;
   gender: string;
 }
-interface ParticipantGear {
-  weight?: number;
-  weightUnit?: string;
+
+interface Height {
   height?: number;
   heightUnit?: string;
-  shoeSizeType?: string;
+}
+
+interface Weight {
+  weight?: number;
+  weightUnit?: string;
+}
+
+interface BodyMeasurements {
+  height?: Height;
+  // shoeSizeType?: string;
+  weight?: Weight;
   shoeSize?: number;
   bodyType?: string;
+}
+
+interface ParticipantGear {
   mask?: boolean;
   snorkel?: boolean;
   fins?: boolean;
@@ -33,6 +45,7 @@ interface Participant {
   customerType: "67935ccc11ac382a787fc0ce";
   diverDetails: DiverDetails;
   isDeclarationsProvided: boolean;
+  bodyMeasurements: BodyMeasurements;
 }
 
 interface BookingContact {
@@ -99,6 +112,18 @@ const bookingSlice = createSlice({
           participantGear: {},
         },
         isDeclarationsProvided: false,
+        bodyMeasurements: {
+          weight: {
+            weight: undefined,
+            weightUnit: undefined,
+          },
+          height: {
+            height: undefined,
+            heightUnit: undefined,
+          },
+          shoeSize: undefined,
+          bodyType: "",
+        },
       });
     },
 
@@ -139,19 +164,90 @@ const bookingSlice = createSlice({
         console.log("Personal info", state.participants[index].personalInfo);
       }
     },
-    setIsDeclarationsProvided(state, action: PayloadAction<number>) {
-      if (state.participants[action.payload]) {
-        state.participants[action.payload].isDeclarationsProvided = true;
+    setIsDeclarationsProvided(
+      state,
+      action: PayloadAction<{ index: number; isDeclarationsProvided: boolean }>
+    ) {
+      const { index, isDeclarationsProvided } = action.payload;
+      if (state.participants[index]) {
+        state.participants[index].isDeclarationsProvided =
+          isDeclarationsProvided;
         console.log(
-          "Declaration",
-          state.participants[action.payload].isDeclarationsProvided
+          `Declaration of participant ${index} is set to`,
+          state.participants[index].isDeclarationsProvided
         );
       }
     },
-    setParticipantNeedsGear(state, action: PayloadAction<number>) {
-      if (state.participants[action.payload]) {
-        state.participants[action.payload].diverDetails.needsGear = true;
+
+    setParticipantDiverDetails(
+      state,
+      action: PayloadAction<{ index: number; diverDetails: DiverDetails }>
+    ) {
+      const { index, diverDetails } = action.payload;
+      if (state.participants[index]) {
+        state.participants[index].diverDetails = diverDetails;
+        console.log(
+          `Diver Details for participant ${index} updated:`,
+          state.participants[index].diverDetails
+        );
       }
+    },
+
+    setParticipantBodyMeasurements(
+      state,
+      action: PayloadAction<{
+        index: number;
+        bodyMeasurements: BodyMeasurements;
+      }>
+    ) {
+      const { index, bodyMeasurements } = action.payload;
+      if (state.participants[index]) {
+        state.participants[index].bodyMeasurements = {
+          ...bodyMeasurements,
+        };
+        console.log(
+          `Body Measurements for participant ${index} updated:`,
+          state.participants[index].bodyMeasurements
+        );
+      }
+    },
+
+    setContactFormDataNew(state, action: PayloadAction<BookingContact>) {
+      const {
+        email,
+        firstName,
+        lastName,
+        phoneNumber,
+        phoneCountryCode,
+        phoneCountryName,
+      } = action.payload;
+
+      // Update the BookingContact state
+      state.bookingContact = {
+        email,
+        firstName,
+        lastName,
+        phoneNumber,
+        phoneCountryCode,
+        phoneCountryName,
+      };
+
+      console.log("Updated Booking Contact:", state.bookingContact);
+    },
+
+    setEmergencyContactNew(state, action: PayloadAction<EmergencyContact>) {
+      const { eFirstName, eLastName, phoneCountryCode, phoneCountryName } =
+        action.payload;
+
+      // Update the EmergencyContact in state
+      state.emergencyContact = {
+        eFirstName,
+        eLastName,
+        phoneCountryCode,
+        phoneCountryName,
+      };
+
+      console.log("Updated Emergency Contact:", state.emergencyContact);
     },
   },
 });
@@ -161,5 +257,9 @@ export const {
   removeParticipantNew,
   setPersonalInfo,
   setIsDeclarationsProvided,
+  setParticipantDiverDetails,
+  setParticipantBodyMeasurements,
+  setContactFormDataNew,
+  setEmergencyContactNew,
 } = bookingSlice.actions;
 export default bookingSlice.reducer;

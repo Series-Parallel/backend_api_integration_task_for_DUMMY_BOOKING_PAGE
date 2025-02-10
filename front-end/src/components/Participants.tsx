@@ -105,7 +105,7 @@ const Participants: React.FC<ParticipantsProps> = () => {
             {" "}
             <div className="text-[35px] mt-[50px] font-bold">
               Select participants
-              <div>Number of Participants: {participants.length}</div>
+              {/* <div>Number of Participants: {participants.length}</div> */}
             </div>
             <div className="w-[550px] h-[104px]  border-1 border-gray-300 rounded-[20px] flex flex-row justify-center items-center">
               <div className="flex flex-col text-[15px] mr-[200px] ">
