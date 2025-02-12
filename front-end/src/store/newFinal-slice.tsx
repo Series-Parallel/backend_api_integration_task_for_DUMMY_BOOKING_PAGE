@@ -1,4 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../store/index";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+import { setBookingConfirm } from "./submitButton-slice";
 
 interface PersonalInfo {
   firstName: string;
@@ -251,6 +255,51 @@ const bookingSlice = createSlice({
     },
   },
 });
+
+export const postBooking = createAsyncThunk(
+  "booking/postBooking",
+  async (_, { getState, rejectWithValue, dispatch }) => {
+    try {
+      const state = getState() as RootState;
+      console.log("[postBooking] Full Redux State:", state);
+
+      const bookingData = state.booking;
+      // const bookingDone = useSelector(
+      //   (state: RootState) => state.submitButton.bookingConfirm
+      // );
+      // const dispatch = useDispatch();
+
+      if (!bookingData || !bookingData.participants.length) {
+        throw new Error(
+          "Booking data is missing or participants list is empty."
+        );
+      }
+
+      console.log("[postBooking] Final API Request:", bookingData);
+      dispatch(setBookingConfirm(true));
+
+      const response = await fetch(
+        "https://staging-api.bookwithbuddy.com/customer-webflow/business/67935ccc11ac382a787fc0c3/booking/summary",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bookingData), // Send the entire Redux state
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error: any) {
+      console.error("Error in postBooking:", error);
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export const {
   addParticipantNew,

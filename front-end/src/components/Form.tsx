@@ -39,6 +39,7 @@ const Form: React.FC<FormProps> = ({
   onContactValidationChange = () => {},
 }) => {
   const formik = useFormik({
+    enableReinitialize: false,
     initialValues: {
       firstName: "Deo",
       lastName: "Pathak",
@@ -159,7 +160,7 @@ const Form: React.FC<FormProps> = ({
         weightUnit: formik.values.weightUnit || undefined,
       },
       shoeSize: formik.values.shoeSize || undefined,
-      bodyType: formik.values.bodyType, // Ensure bodyType is correctly captured
+      bodyType: formik.values.bodyType,
     };
 
     const needsGear = Object.values(participantGear).some((gear) => gear);

@@ -38,6 +38,9 @@ const Participants: React.FC<ParticipantsProps> = () => {
   const [isContactFormValid, setIsContactFormValid] = useState<boolean>(false);
   const [isPaymentVisible, setIsPaymentVisible] = useState<boolean>(false);
   const step = useSelector((state: RootState) => state.step.step);
+  const bookingDone = useSelector(
+    (state: RootState) => state.submitButton.bookingConfirm
+  );
 
   const handleExtraForm = (index: number) => {
     setExtraForms((prev) =>
@@ -200,12 +203,14 @@ const Participants: React.FC<ParticipantsProps> = () => {
         )}
         {step === 3 && <Payment />}
       </div>
-      <Cart
-        isFormValid={formValidChange}
-        onContinueClick={handleContactFormVisibility}
-        isContactFormValid={isContactFormValid}
-        onPaymentVisibilityChange={setIsPaymentVisible}
-      />
+      {!bookingDone && (
+        <Cart
+          isFormValid={formValidChange}
+          onContinueClick={handleContactFormVisibility}
+          isContactFormValid={isContactFormValid}
+          onPaymentVisibilityChange={setIsPaymentVisible}
+        />
+      )}
     </div>
   );
 };

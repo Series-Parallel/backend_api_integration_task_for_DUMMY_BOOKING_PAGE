@@ -3,7 +3,8 @@ import { AppDispatch, RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { setSubmitButtonClicked } from "../store/submitButton-slice";
 import { setStep } from "../store/step-slice";
-import { postBooking, setCombineFormData } from "../store/form-slice";
+// import {  setCombineFormData } from "../store/form-slice";
+import { postBooking } from "../store/newFinal-slice";
 
 interface CartProps {
   isFormValid: boolean;
@@ -44,7 +45,7 @@ const Cart: React.FC<CartProps> = ({
 
     if (step === 3 && isContactFormValid && isFormValidHere) {
       console.log("Before Dispatch:", isSubmitButtonClicked);
-      dispatch(setCombineFormData());
+      // dispatch(setCombineFormData());
       dispatch(setSubmitButtonClicked(true));
       dispatch(setSubmitButtonClicked(true));
       setTimeout(() => {
@@ -118,7 +119,7 @@ const Cart: React.FC<CartProps> = ({
         }`}
         onClick={handleContinueButtonClick}
       >
-        Continue
+        {step === 3 ? "Confirm Booking!" : "Continue"}
       </button>
     </div>
   );
